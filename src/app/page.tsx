@@ -60,7 +60,7 @@ export default function HomePage() {
           </div>
 
           {/* Right Column: Image and Links */}
-          <div className="md:col-span-1 flex flex-col items-center md:items-end space-y-6 animate-fade-in-right">
+          <div className="md:col-span-1 flex flex-col items-center md:items-center space-y-6 animate-fade-in-right">
             <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72">
               <Image
                 src="https://placehold.co/400x400.png"
