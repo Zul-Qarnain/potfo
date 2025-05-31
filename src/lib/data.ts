@@ -1,3 +1,4 @@
+
 import type { Github, Linkedin, GraduationCap, FlaskConical, Briefcase, Settings2, School } from 'lucide-react';
 
 export interface Skill {
@@ -24,10 +25,10 @@ export interface ProfileLink {
 }
 
 export const profileLinks: ProfileLink[] = [
-  { name: 'Google Scholar', url: '#', icon: 'GraduationCap', ariaLabel: 'View Google Scholar profile' },
-  { name: 'GitHub', url: 'https://github.com/yourusername', icon: 'Github', ariaLabel: 'View GitHub profile' },
-  { name: 'ResearchGate', url: '#', icon: 'FlaskConical', ariaLabel: 'View ResearchGate profile' },
-  { name: 'LinkedIn', url: '#', icon: 'Linkedin', ariaLabel: 'View LinkedIn profile' },
+  { name: 'Google Scholar', url: 'https://scholar.google.com/citations?user=RebPXvAAAAAJ&hl=en&authuser=3', icon: 'GraduationCap', ariaLabel: 'View Google Scholar profile' },
+  { name: 'GitHub', url: 'https://github.com/Zul-Qarnain', icon: 'Github', ariaLabel: 'View GitHub profile' },
+  { name: 'ResearchGate', url: 'https://www.researchgate.net/profile/Mohammad-Hossian-2?ev=hdr_xprf', icon: 'FlaskConical', ariaLabel: 'View ResearchGate profile' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/zul-qarnain20/', icon: 'Linkedin', ariaLabel: 'View LinkedIn profile' },
 ];
 
 export const educationData = {
