@@ -4,17 +4,44 @@ import type { Github, Linkedin, GraduationCap, FlaskConical, Briefcase, Settings
 export interface Skill {
   name: string;
   percentage: number;
-  category: 'Programming Languages' | 'Tools & Frameworks';
+  category: string; // More generic category
+  color?: string; // Tailwind CSS background color class, e.g., 'bg-blue-500'
 }
 
 export const skillsData: Skill[] = [
-  { name: 'Python', percentage: 90, category: 'Programming Languages' },
-  { name: 'Java', percentage: 80, category: 'Programming Languages' },
-  { name: 'C++', percentage: 90, category: 'Programming Languages' },
-  { name: 'Machine Learning', percentage: 70, category: 'Tools & Frameworks' },
-  { name: 'Deep Learning', percentage: 50, category: 'Tools & Frameworks' },
-  { name: 'Next.js', percentage: 70, category: 'Tools & Frameworks' },
-  { name: 'Tailwind CSS', percentage: 60, category: 'Tools & Frameworks' },
+  // Programming Languages
+  { name: 'Python', percentage: 90, category: 'Programming Languages', color: 'bg-yellow-500' },
+  { name: 'JavaScript', percentage: 85, category: 'Programming Languages', color: 'bg-sky-500' },
+  { name: 'Java', percentage: 80, category: 'Programming Languages', color: 'bg-red-500' },
+  { name: 'C++', percentage: 90, category: 'Programming Languages', color: 'bg-green-500' },
+  { name: 'TypeScript', percentage: 70, category: 'Programming Languages', color: 'bg-blue-600' },
+
+  // Machine Learning
+  { name: 'Machine Learning Principles', percentage: 70, category: 'Machine Learning', color: 'bg-purple-500' },
+  { name: 'Deep Learning', percentage: 50, category: 'Machine Learning', color: 'bg-pink-500' },
+  { name: 'PyTorch', percentage: 75, category: 'Machine Learning', color: 'bg-orange-500' },
+  { name: 'Hugging Face', percentage: 65, category: 'Machine Learning', color: 'bg-yellow-400' },
+  
+  // Frontend
+  { name: 'Next.js', percentage: 70, category: 'Frontend', color: 'bg-green-500' },
+  { name: 'React', percentage: 80, category: 'Frontend', color: 'bg-sky-500' },
+  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', color: 'bg-teal-500' },
+  { name: 'HTML/CSS', percentage: 90, category: 'Frontend', color: 'bg-red-500' },
+
+  // Backend
+  { name: 'Node.js', percentage: 70, category: 'Backend', color: 'bg-green-600' },
+  { name: 'Express.js', percentage: 65, category: 'Backend', color: 'bg-gray-500' },
+
+  // Database
+  { name: 'MongoDB', percentage: 60, category: 'Database', color: 'bg-green-700' },
+  { name: 'PostgreSQL', percentage: 55, category: 'Database', color: 'bg-blue-700' },
+
+  // DevOps
+  { name: 'Docker', percentage: 60, category: 'DevOps', color: 'bg-sky-600' },
+  { name: 'Git & GitHub', percentage: 85, category: 'DevOps', color: 'bg-orange-600' },
+  
+  // Design
+  { name: 'Figma', percentage: 70, category: 'Design', color: 'bg-purple-600' },
 ];
 
 export interface ProfileLink {
@@ -43,7 +70,7 @@ export const experienceData = {
 };
 
 export const skillsSectionData = {
-  icon: 'Settings2',
+  icon: 'Settings2', // This might not be used directly in the title anymore
 };
 
 

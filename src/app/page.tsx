@@ -3,7 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { SkillBar } from '@/components/home/SkillBar';
-import { skillsData, profileLinks, educationData, experienceData, skillsSectionData, resumeUrl } from '@/lib/data';
+import { skillsData, profileLinks, educationData, experienceData, resumeUrl } from '@/lib/data';
+import type { Skill } from '@/lib/data';
 import * as LucideIcons from 'lucide-react';
 
 // Helper function to get Lucide icon component by name
@@ -12,19 +13,41 @@ const getIcon = (iconName: string): React.ElementType => {
   return IconComponent || LucideIcons.HelpCircle; // Fallback icon
 };
 
+interface GroupedSkills {
+  [category: string]: Skill[];
+}
+
 export default function HomePage() {
   const EducationIcon = getIcon(educationData.icon);
   const ExperienceIcon = getIcon(experienceData.icon);
-  const SkillsIcon = getIcon(skillsSectionData.icon);
 
-  const programmingSkills = skillsData.filter(skill => skill.category === 'Programming Languages');
-  const toolsFrameworksSkills = skillsData.filter(skill => skill.category === 'Tools & Frameworks');
+  const groupedSkills = skillsData.reduce<GroupedSkills>((acc, skill) => {
+    const { category } = skill;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(skill);
+    return acc;
+  }, {});
+
+  // Define the desired order of skill categories
+  const skillCategoryOrder: string[] = [
+    'Programming Languages',
+    'Machine Learning',
+    'Frontend',
+    'Backend',
+    'Database',
+    'DevOps',
+    'Design',
+  ];
+  
+  const sortedSkillCategories = skillCategoryOrder.filter(category => groupedSkills[category]);
+
 
   return (
     <div className="bg-background text-foreground min-h-screen">
       <section id="home" className="section-container pt-12 md:pt-20">
-        <div className="grid md:grid-cols-3 gap-12 items-start"> {/* Changed items-center to items-start for better alignment with longer text */}
-          {/* Left Column: Text Content */}
+        <div className="grid md:grid-cols-3 gap-12 items-start">
           <div className="md:col-span-2 space-y-8">
             <div className="animate-fade-in-up">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-headline leading-tight">
@@ -40,7 +63,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Education Section */}
             <div className="animate-fade-in-up animation-delay-200 bg-card p-6 rounded-lg shadow-md border border-border">
               <div className="flex items-center mb-4">
                 <EducationIcon className="mr-3 h-7 w-7 text-primary" />
@@ -53,7 +75,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Experience Section */}
              <div className="animate-fade-in-up animation-delay-400 bg-card p-6 rounded-lg shadow-md border border-border">
               <div className="flex items-center mb-4">
                 <ExperienceIcon className="mr-3 h-7 w-7 text-primary" />
@@ -67,8 +88,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right Column: Image and Links */}
-          <div className="md:col-span-1 flex flex-col items-center md:items-center space-y-6 animate-fade-in-right mt-8 md:mt-0"> {/* Added mt-8 for spacing on small screens */}
+          <div className="md:col-span-1 flex flex-col items-center md:items-center space-y-6 animate-fade-in-right mt-8 md:mt-0">
             <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72">
               <Image
                 src="https://placehold.co/400x400.png"
@@ -106,29 +126,32 @@ export default function HomePage() {
         </div>
       </section>
       
-      {/* Skills Section */}
       <section id="skills" className="section-container bg-muted/30 dark:bg-muted/10 py-16 md:py-24 rounded-lg my-12">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-headline font-bold text-center mb-4 flex items-center justify-center">
-            <SkillsIcon className="mr-3 h-8 w-8 text-primary" />
-            My Skills
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-headline font-bold text-center mb-4">
+            Skills
           </h2>
           <p className="text-center text-muted-foreground mb-12">
-            Here&apos;s a snapshot of my technical capabilities and expertise.
+            Collection of technical skills I&apos;ve acquired over the years.
           </p>
-          <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
-            <div>
-              <h3 className="text-xl font-semibold font-headline mb-6 text-primary">Programming Languages</h3>
-              {programmingSkills.map((skill) => (
-                <SkillBar key={skill.name} skill={skill.name} percentage={skill.percentage} />
-              ))}
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold font-headline mb-6 text-primary">Tools & Frameworks</h3>
-              {toolsFrameworksSkills.map((skill) => (
-                <SkillBar key={skill.name} skill={skill.name} percentage={skill.percentage} />
-              ))}
-            </div>
+          <div className="space-y-12">
+            {sortedSkillCategories.map((category) => (
+              <div key={category}>
+                <h3 className="text-xl font-semibold font-headline mb-6 text-primary">
+                  {category}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                  {groupedSkills[category].map((skill) => (
+                    <SkillBar 
+                      key={skill.name} 
+                      skill={skill.name} 
+                      percentage={skill.percentage} 
+                      color={skill.color}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
