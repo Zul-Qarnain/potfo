@@ -8,46 +8,48 @@ body {
 
 @layer base {
   :root {
-    --background: 225 33% 97%; /* Very light grey (#F4F4F8) */
-    --foreground: 222 39% 11%; /* Dark text (#111827) */
+    /* Tokyo Night & Monokai Light Mix */
+    --background: 240 20% 97%; /* Soft very light lavender-grey (#f0f0f7) */
+    --foreground: 227 23% 28%; /* Dark muted blue/grey (#343b58) */
     --card: 0 0% 100%; /* White (#FFFFFF) */
-    --card-foreground: 222 39% 11%; /* Dark text */
+    --card-foreground: 227 23% 28%; /* Dark muted blue/grey */
     --popover: 0 0% 100%; /* White */
-    --popover-foreground: 222 39% 11%; /* Dark text */
-    --primary: 243 75% 59%; /* Indigo (#4F46E5) */
+    --popover-foreground: 227 23% 28%; /* Dark muted blue/grey */
+    --primary: 339 95% 54%; /* Monokai Pink (#f92672) */
     --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 220 13% 96%; /* Light grey (#F3F4F6) */
-    --secondary-foreground: 220 10% 28%; /* Med-Dark grey (#374151) */
-    --muted: 220 17% 98%; /* Very light grey (#F9FAFB) */
-    --muted-foreground: 220 6% 47%; /* Grey (#6B7280) */
-    --accent: 242 88% 83%; /* Violet (#A3A1F7) */
-    --accent-foreground: 242 54% 36%; /* Dark Indigo (#28268E) */
+    --secondary: 81 78% 53%; /* Monokai Green (#a6e22e) */
+    --secondary-foreground: 0 0% 12%; /* Dark text for contrast on green (#1e1e1e) */
+    --muted: 240 20% 90%; /* Lighter grey (#e6e6f0) */
+    --muted-foreground: 232 17% 56%; /* Medium grey (#787c99) */
+    --accent: 55 69% 68%; /* Monokai Yellow (#e6db74) */
+    --accent-foreground: 0 0% 12%; /* Dark text for contrast on yellow (#1e1e1e) */
     --destructive: 0 84.2% 60.2%; /* Original Red */
     --destructive-foreground: 0 0% 98%; /* White text on red */
-    --border: 220 13% 91%; /* Light grey border (#E5E7EB) */
+    --border: 240 20% 87%; /* Light grey border (#dcdcef) */
     --input: 0 0% 100%; /* White input background */
-    --ring: 243 75% 59%; /* Indigo for focus rings */
+    --ring: 339 95% 54%; /* Monokai Pink for focus rings */
     
-    --chart-1: 243 75% 59%; /* Indigo */
-    --chart-2: 243 83% 67%; /* Med Indigo */
-    --chart-3: 243 72% 71%; /* Light Indigo */
-    --chart-4: 242 88% 83%; /* Violet */
-    --chart-5: 242 91% 88%; /* Light Violet */
+    --chart-1: 339 95% 54%; /* Monokai Pink */
+    --chart-2: 81 78% 53%; /* Monokai Green */
+    --chart-3: 204 95% 59%; /* Monokai Blue (#66d9ef) */
+    --chart-4: 30 100% 65%; /* Monokai Orange (#fd971f) */
+    --chart-5: 55 69% 68%; /* Monokai Yellow */
     
     --radius: 0.5rem;
 
-    /* Sidebar variables for light theme */
-    --sidebar-background: 0 0% 100%; /* White */
-    --sidebar-foreground: 220 6% 47%; /* Grey text */
-    --sidebar-primary: 243 75% 59%; /* Indigo */
-    --sidebar-primary-foreground: 0 0% 100%; /* White text on Indigo */
-    --sidebar-accent: 220 13% 96%; /* Light grey for hover */
-    --sidebar-accent-foreground: 222 39% 11%; /* Dark text on hover */
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 243 75% 59%;
+    /* Sidebar variables for Tokyo Night/Monokai light theme */
+    --sidebar-background: 240 20% 95%; /* Slightly darker than main bg for sidebar */
+    --sidebar-foreground: 227 23% 28%; /* Dark muted blue/grey text */
+    --sidebar-primary: 339 95% 54%; /* Monokai Pink */
+    --sidebar-primary-foreground: 0 0% 100%; /* White text on Pink */
+    --sidebar-accent: 240 20% 90%; /* Lighter grey for hover */
+    --sidebar-accent-foreground: 227 23% 20%; /* Darker text on hover */
+    --sidebar-border: 240 20% 85%;
+    --sidebar-ring: 339 95% 54%;
   }
 
   .dark {
+    /* Dracula Theme - Stays the same */
     --background: 231 15% 18%; /* Dracula BG: #282a36 */
     --foreground: 60 30% 95%; /* Dracula FG: #f8f8f2 */
     --card: 231 15% 18%; /* Dracula BG for cards too, matching screenshot */
@@ -152,7 +154,7 @@ section {
   animation: progress-bar 1.5s ease-out forwards;
 }
 
-/* Entry animations from page.tsx */
+/* Entry animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -191,3 +193,5 @@ section {
 .animate-fade-in-up.animation-delay-600 {
   opacity: 0;
 }
+
+    

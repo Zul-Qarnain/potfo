@@ -47,7 +47,7 @@ export default function RootLayout({
       <body className="font-body antialiased flex flex-col min-h-screen">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark" /* Changed to dark to make Dracula the default */
+          defaultTheme="light" /* Set to light to make Tokyo/Monokai mix the default */
           enableSystem
           disableTransitionOnChange
         >
@@ -62,3 +62,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    
