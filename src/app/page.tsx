@@ -23,37 +23,50 @@ export default function HomePage() {
   return (
     <div className="bg-background text-foreground min-h-screen">
       <section id="home" className="section-container pt-12 md:pt-20">
-        <div className="grid md:grid-cols-3 gap-12 items-center">
+        <div className="grid md:grid-cols-3 gap-12 items-start"> {/* Changed items-center to items-start for better alignment with longer text */}
           {/* Left Column: Text Content */}
           <div className="md:col-span-2 space-y-8">
             <div className="animate-fade-in-up">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-headline leading-tight">
                 Hi, I&apos;m <span className="text-primary">Mohammad Shihab Hossain</span>
               </h1>
-              <p className="mt-4 text-lg sm:text-xl text-muted-foreground max-w-2xl">
-                A passionate Computer Science researcher specializing in Artificial Intelligence and Machine Learning. Welcome to my personal space where I share my work, projects, and journey.
-              </p>
+              <div className="mt-6 text-lg text-muted-foreground max-w-2xl space-y-4">
+                <p>
+                  I am a highly motivated and aspiring AI researcher with a strong background in deep learning, quantum computing, and web development. Over the past year, I have gained extensive experience in web development using React, application development, and have achieved proficiency in 14 programming languages. I have hands-on experience with PyTorch and large language models (LLMs), and I have also published a research paper focusing on Artificial Intelligence and LLMs.
+                </p>
+                <p>
+                  My aspiration is to harness the power of AI to address some of the most pressing challenges of our time—such as cancer treatment, renewable energy solutions, and longevity—through the integration of AI with quantum physics, a field often referred to as Quantum AI. I am deeply interested in how AI can be used to create innovative, transformative solutions that contribute to a better future.
+                </p>
+                <p>
+                  Currently, I am pursuing my undergraduate degree in Computer Science at American International University-Bangladesh (AIUB). My academic focus is on advancing computing technologies and making everyday life easier through intelligent, cutting-edge systems.
+                </p>
+                <p>
+                  I am committed to continuing my research in AI and quantum computing, with a goal of contributing to pioneering innovations that solve real-world problems and shape the future of technology.
+                </p>
+              </div>
             </div>
 
             {/* Education Section */}
-            <div className="animate-fade-in-up animation-delay-200">
-              <h2 className="text-2xl font-headline font-semibold mb-3 flex items-center">
+            <div className="animate-fade-in-up animation-delay-200 bg-card p-6 rounded-lg shadow-md border border-border">
+              <div className="flex items-center mb-4">
                 <EducationIcon className="mr-3 h-7 w-7 text-primary" />
-                Education
-              </h2>
-              <hr className="border-primary/30 mb-4" />
+                <h2 className="text-2xl font-headline font-semibold text-foreground">
+                  Education
+                </h2>
+              </div>
               <p className="text-muted-foreground">
                 Currently pursuing a {educationData.major} at <strong className="text-foreground">{educationData.university}</strong>.
               </p>
             </div>
 
             {/* Experience Section */}
-             <div className="animate-fade-in-up animation-delay-400">
-              <h2 className="text-2xl font-headline font-semibold mb-3 flex items-center">
+             <div className="animate-fade-in-up animation-delay-400 bg-card p-6 rounded-lg shadow-md border border-border">
+              <div className="flex items-center mb-4">
                 <ExperienceIcon className="mr-3 h-7 w-7 text-primary" />
-                Experience
-              </h2>
-              <hr className="border-primary/30 mb-4" />
+                <h2 className="text-2xl font-headline font-semibold text-foreground">
+                  Experience
+                </h2>
+              </div>
               <p className="text-muted-foreground whitespace-pre-line">
                 {experienceData.summary}
               </p>
@@ -61,7 +74,7 @@ export default function HomePage() {
           </div>
 
           {/* Right Column: Image and Links */}
-          <div className="md:col-span-1 flex flex-col items-center md:items-center space-y-6 animate-fade-in-right">
+          <div className="md:col-span-1 flex flex-col items-center md:items-center space-y-6 animate-fade-in-right mt-8 md:mt-0"> {/* Added mt-8 for spacing on small screens */}
             <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72">
               <Image
                 src="https://placehold.co/400x400.png"
