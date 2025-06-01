@@ -31,12 +31,13 @@ export default function HomePage() {
   }, {});
 
   // Define the desired order of skill categories from the image
-  const skillCategoryOrder: string[] = [
+   const skillCategoryOrder: string[] = [
     'Machine Learning',
     'Data Science',
     'Programming Languages',
     'Frontend',
     'Backend',
+    'Database', // Added Database category
   ];
   
   const sortedSkillCategories = skillCategoryOrder.filter(category => groupedSkills[category]);
@@ -138,13 +139,15 @@ export default function HomePage() {
                 <h3 className="text-xl font-semibold font-headline mb-6 text-foreground">
                   {category}
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                   {groupedSkills[category].map((skill) => (
                     <SkillBar 
                       key={skill.name} 
-                      skill={skill.name} 
+                      skillName={skill.name} 
                       percentage={skill.percentage} 
-                      color={skill.color}
+                      barColor={skill.color}
+                      iconName={skill.icon}
+                      iconClasses={skill.iconClasses}
                     />
                   ))}
                 </div>
@@ -156,3 +159,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    

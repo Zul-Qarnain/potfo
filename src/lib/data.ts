@@ -5,38 +5,43 @@ export interface Skill {
   name: string;
   percentage: number;
   category: string;
-  color?: string; // Tailwind CSS background color class, e.g., 'bg-blue-500'
+  color: string; // Tailwind CSS background color class for the progress bar fill
+  icon: string; // Lucide icon name
+  iconClasses: string; // Tailwind CSS classes for icon color
 }
 
-// Updated skillsData based on the provided image
 export const skillsData: Skill[] = [
   // Machine Learning
-  { name: 'PyTorch', percentage: 70, category: 'Machine Learning', color: 'bg-orange-500' },
-  { name: 'Hugging Face', percentage: 60, category: 'Machine Learning', color: 'bg-green-400' },
+  { name: 'PyTorch', percentage: 70, category: 'Machine Learning', icon: 'Flame', iconClasses: 'text-orange-500', color: 'bg-orange-500' },
+  { name: 'Hugging Face', percentage: 60, category: 'Machine Learning', icon: 'Smile', iconClasses: 'text-yellow-400', color: 'bg-yellow-400' },
 
   // Data Science
-  { name: 'NumPy', percentage: 65, category: 'Data Science', color: 'bg-blue-500' },
+  { name: 'NumPy', percentage: 65, category: 'Data Science', icon: 'Sigma', iconClasses: 'text-blue-500', color: 'bg-blue-500' },
 
   // Programming Languages
-  { name: 'JavaScript', percentage: 85, category: 'Programming Languages', color: 'bg-blue-600' },
-  { name: 'Python', percentage: 90, category: 'Programming Languages', color: 'bg-green-500' },
-  { name: 'TypeScript', percentage: 75, category: 'Programming Languages', color: 'bg-yellow-500' },
+  { name: 'JavaScript', percentage: 85, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-yellow-400', color: 'bg-yellow-400' },
+  { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', iconClasses: 'text-green-500', color: 'bg-green-500' },
+  { name: 'TypeScript', percentage: 75, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-blue-500', color: 'bg-blue-500' },
   
   // Frontend
-  { name: 'React', percentage: 80, category: 'Frontend', color: 'bg-sky-500' },
-  { name: 'Next.js', percentage: 70, category: 'Frontend', color: 'bg-emerald-500' },
-  { name: 'HTML/CSS', percentage: 90, category: 'Frontend', color: 'bg-orange-400' },
-  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', color: 'bg-indigo-500' },
+  { name: 'React', percentage: 80, category: 'Frontend', icon: 'Atom', iconClasses: 'text-sky-500', color: 'bg-sky-500' },
+  { name: 'Next.js', percentage: 70, category: 'Frontend', icon: 'Triangle', iconClasses: 'text-foreground dark:text-white', color: 'bg-green-500' },
+  { name: 'HTML5/CSS3', percentage: 90, category: 'Frontend', icon: 'Code', iconClasses: 'text-orange-500', color: 'bg-orange-500' },
+  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Wind', iconClasses: 'text-purple-500', color: 'bg-purple-500' },
   
   // Backend
-  { name: 'Node.js', percentage: 70, category: 'Backend', color: 'bg-green-600' },
-  { name: 'Express', percentage: 50, category: 'Backend', color: 'bg-slate-400' },
+  { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'BoxSelect', iconClasses: 'text-green-600', color: 'bg-green-600' },
+  { name: 'Express', percentage: 50, category: 'Backend', icon: 'Server', iconClasses: 'text-neutral-400', color: 'bg-neutral-400' },
+
+  // Database (New category from image)
+  { name: 'MongoDB', percentage: 60, category: 'Database', icon: 'Database', iconClasses: 'text-green-500', color: 'bg-green-500' },
+  { name: 'PostgreSQL', percentage: 55, category: 'Database', icon: 'DatabaseZap', iconClasses: 'text-blue-600', color: 'bg-blue-600' },
 ];
 
 export interface ProfileLink {
   name: string;
   url: string;
-  icon: string; // Lucide icon name as a string
+  icon: string; 
   ariaLabel: string;
 }
 
@@ -205,3 +210,5 @@ export const contactSectionData = {
 };
 
 export const resumeUrl = "/resume.pdf"; 
+
+    

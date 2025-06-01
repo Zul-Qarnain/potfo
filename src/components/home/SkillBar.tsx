@@ -3,16 +3,26 @@
 
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import * as LucideIcons from 'lucide-react';
 
 interface SkillBarProps {
-  skill: string;
+  skillName: string;
   percentage: number;
-  color?: string; 
+  barColor: string; // Tailwind CSS background color class for the fill
+  iconName: string; // Lucide icon name
+  iconClasses: string; // Tailwind CSS classes for icon color
 }
 
-export function SkillBar({ skill, percentage, color }: SkillBarProps) {
+const getIcon = (iconName: string): React.ElementType => {
+  const IconComponent = (LucideIcons as any)[iconName];
+  return IconComponent || LucideIcons.HelpCircle; // Fallback icon
+};
+
+export function SkillBar({ skillName, percentage, barColor, iconName, iconClasses }: SkillBarProps) {
   const [isInView, setIsInView] = useState(false);
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
+
+  const IconComponent = getIcon(iconName);
 
   useEffect(() => {
     if (!ref) return;
@@ -39,25 +49,28 @@ export function SkillBar({ skill, percentage, color }: SkillBarProps) {
   }, [ref]);
 
   return (
-    <div ref={setRef} className="mb-4">
-      <div className="flex justify-between mb-1">
-        <span className="text-sm font-medium text-foreground">{skill}</span>
-        <span className="text-sm font-medium text-foreground">{percentage}%</span>
+    <div ref={setRef} className="bg-card p-3 rounded-md shadow-sm flex flex-col space-y-2">
+      <div className="flex items-center">
+        <IconComponent className={cn('w-5 h-5 mr-2 shrink-0', iconClasses)} />
+        <span className="text-sm text-foreground">{skillName}</span>
       </div>
-      <div className="w-full bg-background dark:bg-background rounded-full h-2.5">
+      <div className="w-full bg-muted dark:bg-neutral-700 rounded-full h-2">
         <div
           className={cn(
-            "h-2.5 rounded-full transition-all duration-1000 ease-out skill-bar-fill",
-            color || 'bg-primary' 
+            "h-2 rounded-full transition-all duration-1000 ease-out",
+            barColor,
+            isInView ? 'skill-bar-fill' : '' // Ensure animation class is applied conditionally
           )}
           style={{ width: isInView ? `${percentage}%` : '0%' }}
           aria-valuenow={percentage}
           aria-valuemin={0}
           aria-valuemax={100}
           role="progressbar"
-          aria-label={`${skill} progress: ${percentage}%`}
+          aria-label={`${skillName} progress: ${percentage}%`}
         ></div>
       </div>
     </div>
   );
 }
+
+    
