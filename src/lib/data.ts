@@ -47,7 +47,7 @@ export const skillsData: Skill[] = [
 export interface ProfileLink {
   name: string;
   url: string;
-  icon: React.ElementType<Github | Linkedin | GraduationCap | FlaskConical>; // Lucide icon component
+  icon: string; // Lucide icon name as a string
   ariaLabel: string;
 }
 
