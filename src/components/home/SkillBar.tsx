@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 interface SkillBarProps {
   skill: string;
   percentage: number;
-  color?: string; // Added color prop
+  color?: string; 
 }
 
 export function SkillBar({ skill, percentage, color }: SkillBarProps) {
@@ -25,7 +25,7 @@ export function SkillBar({ skill, percentage, color }: SkillBarProps) {
         }
       },
       {
-        threshold: 0.1, // Trigger when 10% of the element is visible
+        threshold: 0.1,
       }
     );
 
@@ -42,13 +42,13 @@ export function SkillBar({ skill, percentage, color }: SkillBarProps) {
     <div ref={setRef} className="mb-4">
       <div className="flex justify-between mb-1">
         <span className="text-sm font-medium text-foreground">{skill}</span>
-        <span className="text-sm font-medium text-primary">{percentage}%</span> {/* Kept percentage text color as primary for now */}
+        <span className="text-sm font-medium text-foreground">{percentage}%</span>
       </div>
-      <div className="w-full bg-muted rounded-full h-2.5">
+      <div className="w-full bg-background dark:bg-background rounded-full h-2.5">
         <div
           className={cn(
             "h-2.5 rounded-full transition-all duration-1000 ease-out skill-bar-fill",
-            color || 'bg-primary' // Use dynamic color or default to primary
+            color || 'bg-primary' 
           )}
           style={{ width: isInView ? `${percentage}%` : '0%' }}
           aria-valuenow={percentage}
@@ -61,4 +61,3 @@ export function SkillBar({ skill, percentage, color }: SkillBarProps) {
     </div>
   );
 }
-

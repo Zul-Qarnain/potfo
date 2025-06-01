@@ -30,15 +30,13 @@ export default function HomePage() {
     return acc;
   }, {});
 
-  // Define the desired order of skill categories
+  // Define the desired order of skill categories from the image
   const skillCategoryOrder: string[] = [
-    'Programming Languages',
     'Machine Learning',
+    'Data Science',
+    'Programming Languages',
     'Frontend',
     'Backend',
-    'Database',
-    'DevOps',
-    'Design',
   ];
   
   const sortedSkillCategories = skillCategoryOrder.filter(category => groupedSkills[category]);
@@ -126,13 +124,13 @@ export default function HomePage() {
         </div>
       </section>
       
-      <section id="skills" className="section-container bg-muted/30 dark:bg-muted/10 py-16 md:py-24 rounded-lg my-12">
+      <section id="skills" className="section-container bg-muted/30 dark:bg-popover py-16 md:py-24 rounded-lg my-12">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-headline font-bold text-center mb-4">
+          <h2 className="text-3xl font-headline font-bold text-center mb-4 text-foreground">
             Skills
           </h2>
           <p className="text-center text-muted-foreground mb-12">
-            Collection of technical skills I&apos;ve acquired over the years.
+            A collection of technical skills I&apos;ve acquired over the years.
           </p>
           <div className="space-y-12">
             {sortedSkillCategories.map((category) => (

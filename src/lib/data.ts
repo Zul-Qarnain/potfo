@@ -4,44 +4,33 @@ import type { Github, Linkedin, GraduationCap, FlaskConical, Briefcase, Settings
 export interface Skill {
   name: string;
   percentage: number;
-  category: string; // More generic category
+  category: string;
   color?: string; // Tailwind CSS background color class, e.g., 'bg-blue-500'
 }
 
+// Updated skillsData based on the provided image
 export const skillsData: Skill[] = [
-  // Programming Languages
-  { name: 'Python', percentage: 90, category: 'Programming Languages', color: 'bg-blue-500' },
-  { name: 'JavaScript', percentage: 85, category: 'Programming Languages', color: 'bg-yellow-400' },
-  { name: 'Java', percentage: 80, category: 'Programming Languages', color: 'bg-orange-500' },
-  { name: 'C++', percentage: 90, category: 'Programming Languages', color: 'bg-indigo-500' },
-  { name: 'TypeScript', percentage: 70, category: 'Programming Languages', color: 'bg-sky-600' },
-
   // Machine Learning
-  { name: 'Machine Learning Principles', percentage: 70, category: 'Machine Learning', color: 'bg-purple-600' },
-  { name: 'Deep Learning', percentage: 50, category: 'Machine Learning', color: 'bg-pink-600' },
-  { name: 'PyTorch', percentage: 75, category: 'Machine Learning', color: 'bg-red-600' },
-  { name: 'Hugging Face', percentage: 65, category: 'Machine Learning', color: 'bg-amber-500' },
+  { name: 'PyTorch', percentage: 70, category: 'Machine Learning', color: 'bg-orange-500' },
+  { name: 'Hugging Face', percentage: 60, category: 'Machine Learning', color: 'bg-green-400' },
+
+  // Data Science
+  { name: 'NumPy', percentage: 65, category: 'Data Science', color: 'bg-blue-500' },
+
+  // Programming Languages
+  { name: 'JavaScript', percentage: 85, category: 'Programming Languages', color: 'bg-blue-600' },
+  { name: 'Python', percentage: 90, category: 'Programming Languages', color: 'bg-green-500' },
+  { name: 'TypeScript', percentage: 75, category: 'Programming Languages', color: 'bg-yellow-500' },
   
   // Frontend
-  { name: 'Next.js', percentage: 70, category: 'Frontend', color: 'bg-slate-700' },
-  { name: 'React', percentage: 80, category: 'Frontend', color: 'bg-cyan-500' },
-  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', color: 'bg-teal-500' },
-  { name: 'HTML/CSS', percentage: 90, category: 'Frontend', color: 'bg-rose-500' },
-
+  { name: 'React', percentage: 80, category: 'Frontend', color: 'bg-sky-500' },
+  { name: 'Next.js', percentage: 70, category: 'Frontend', color: 'bg-emerald-500' },
+  { name: 'HTML/CSS', percentage: 90, category: 'Frontend', color: 'bg-orange-400' },
+  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', color: 'bg-indigo-500' },
+  
   // Backend
   { name: 'Node.js', percentage: 70, category: 'Backend', color: 'bg-green-600' },
-  { name: 'Express.js', percentage: 65, category: 'Backend', color: 'bg-neutral-500' },
-
-  // Database
-  { name: 'MongoDB', percentage: 60, category: 'Database', color: 'bg-emerald-600' },
-  { name: 'PostgreSQL', percentage: 55, category: 'Database', color: 'bg-blue-700' },
-
-  // DevOps
-  { name: 'Docker', percentage: 60, category: 'DevOps', color: 'bg-sky-700' },
-  { name: 'Git & GitHub', percentage: 85, category: 'DevOps', color: 'bg-zinc-600' },
-  
-  // Design
-  { name: 'Figma', percentage: 70, category: 'Design', color: 'bg-fuchsia-500' },
+  { name: 'Express', percentage: 50, category: 'Backend', color: 'bg-slate-400' },
 ];
 
 export interface ProfileLink {
@@ -70,7 +59,7 @@ export const experienceData = {
 };
 
 export const skillsSectionData = {
-  icon: 'Settings2', // This might not be used directly in the title anymore
+  icon: 'Settings2', 
 };
 
 
@@ -102,7 +91,7 @@ export interface Project {
   description: string;
   techStack: string[];
   githubLink: string;
-  icon: string; // Name of the Lucide icon
+  icon: string; 
 }
 
 export const projectsData: Project[] = [
@@ -215,6 +204,4 @@ export const contactSectionData = {
   note: "I’ll get back to you as soon as possible.",
 };
 
-export const resumeUrl = "/resume.pdf"; // Path to your resume in the public folder
- 
-    
+export const resumeUrl = "/resume.pdf"; 
