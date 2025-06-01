@@ -75,8 +75,7 @@ export interface Project {
   description: string;
   techStack: string[];
   githubLink: string;
-  image: string; 
-  imageHint: string;
+  icon: string; // Name of the Lucide icon
 }
 
 export const projectsData: Project[] = [
@@ -86,8 +85,7 @@ export const projectsData: Project[] = [
     description: 'A modern landing page showcasing concepts in Artificial Intelligence and Robotics, built with Next.js and Tailwind CSS.',
     techStack: ['Next.js', 'React', 'Tailwind CSS'],
     githubLink: 'https://github.com/VirsysX/landingpage',
-    image: 'https://placehold.co/600x400.png',
-    imageHint: 'website ai'
+    icon: 'Bot' 
   },
   {
     id: '2',
@@ -95,8 +93,7 @@ export const projectsData: Project[] = [
     description: 'A demonstration NFT marketplace website, exploring digital asset trading. Built with Next.js and Tailwind CSS.',
     techStack: ['Next.js', 'React', 'Tailwind CSS'],
     githubLink: 'https://github.com/VirsysX/virsysnft',
-    image: 'https://placehold.co/600x400.png',
-    imageHint: 'nft marketplace'
+    icon: 'GalleryHorizontalEnd'
   },
   {
     id: '3',
@@ -104,8 +101,7 @@ export const projectsData: Project[] = [
     description: 'A fast-paced, top-down 2D car dodging game built with Three.js. Avoid traffic, collect coins, and chase high scores!',
     techStack: ['Three.js', 'JavaScript', 'HTML5'],
     githubLink: 'https://github.com/Zul-Qarnain/PixelRacer',
-    image: 'https://placehold.co/600x400.png',
-    imageHint: 'game car'
+    icon: 'Gamepad2'
   },
   {
     id: '4',
@@ -113,8 +109,7 @@ export const projectsData: Project[] = [
     description: "An AI-powered Discord bot with a 'savage' personality, designed to reply to users with witty and sharp tones. Built with Python.",
     techStack: ['Python', 'Discord.py'],
     githubLink: 'https://github.com/Zul-Qarnain/Sanda-AI',
-    image: 'https://placehold.co/600x400.png',
-    imageHint: 'discord bot'
+    icon: 'MessageSquare'
   },
 ];
 
@@ -194,5 +189,5 @@ export const contactSectionData = {
 };
 
 export const resumeUrl = "/resume.pdf"; // Path to your resume in the public folder
-
+ 
     
