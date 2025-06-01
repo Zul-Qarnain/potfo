@@ -21,21 +21,21 @@ export const skillsData: Skill[] = [
   // Programming Languages
   { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-yellow-400', color: 'bg-blue-500' },
   { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', iconClasses: 'text-green-500', color: 'bg-green-500' },
-  { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-blue-500', color: 'bg-sky-400' },
+  { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-blue-500', color: 'bg-yellow-400' },
   
   // Frontend
-  { name: 'React', percentage: 60, category: 'Frontend', icon: 'Atom', iconClasses: 'text-sky-500', color: 'bg-cyan-500' },
-  { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Triangle', iconClasses: 'text-foreground dark:text-white', color: 'bg-teal-500' },
+  { name: 'React', percentage: 60, category: 'Frontend', icon: 'Atom', iconClasses: 'text-sky-500', color: 'bg-blue-500' },
+  { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Triangle', iconClasses: 'text-foreground dark:text-white', color: 'bg-green-500' },
   { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Code', iconClasses: 'text-orange-500', color: 'bg-orange-500' },
-  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Wind', iconClasses: 'text-purple-500', color: 'bg-indigo-500' },
+  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Wind', iconClasses: 'text-purple-500', color: 'bg-purple-500' },
   
   // Backend
-  { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'BoxSelect', iconClasses: 'text-green-600', color: 'bg-lime-500' },
-  { name: 'Express', percentage: 70, category: 'Backend', icon: 'Server', iconClasses: 'text-neutral-400', color: 'bg-fuchsia-500' },
+  { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'BoxSelect', iconClasses: 'text-green-600', color: 'bg-blue-500' },
+  { name: 'Express', percentage: 70, category: 'Backend', icon: 'Server', iconClasses: 'text-neutral-400', color: 'bg-green-500' },
 
   // Database (New category from image)
-  { name: 'MongoDB', percentage: 50, category: 'Database', icon: 'Database', iconClasses: 'text-green-500', color: 'bg-emerald-500' },
-  { name: 'PostgreSQL', percentage: 70, category: 'Database', icon: 'DatabaseZap', iconClasses: 'text-blue-600', color: 'bg-rose-500' },
+  { name: 'MongoDB', percentage: 50, category: 'Database', icon: 'Database', iconClasses: 'text-green-500', color: 'bg-blue-500' },
+  { name: 'PostgreSQL', percentage: 70, category: 'Database', icon: 'DatabaseZap', iconClasses: 'text-blue-600', color: 'bg-green-500' },
 ];
 
 export interface ProfileLink {
