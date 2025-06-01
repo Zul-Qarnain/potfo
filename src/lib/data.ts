@@ -10,38 +10,38 @@ export interface Skill {
 
 export const skillsData: Skill[] = [
   // Programming Languages
-  { name: 'Python', percentage: 90, category: 'Programming Languages', color: 'bg-yellow-500' },
-  { name: 'JavaScript', percentage: 85, category: 'Programming Languages', color: 'bg-sky-500' },
-  { name: 'Java', percentage: 80, category: 'Programming Languages', color: 'bg-red-500' },
-  { name: 'C++', percentage: 90, category: 'Programming Languages', color: 'bg-green-500' },
-  { name: 'TypeScript', percentage: 70, category: 'Programming Languages', color: 'bg-blue-600' },
+  { name: 'Python', percentage: 90, category: 'Programming Languages', color: 'bg-blue-500' },
+  { name: 'JavaScript', percentage: 85, category: 'Programming Languages', color: 'bg-yellow-400' },
+  { name: 'Java', percentage: 80, category: 'Programming Languages', color: 'bg-orange-500' },
+  { name: 'C++', percentage: 90, category: 'Programming Languages', color: 'bg-indigo-500' },
+  { name: 'TypeScript', percentage: 70, category: 'Programming Languages', color: 'bg-sky-600' },
 
   // Machine Learning
-  { name: 'Machine Learning Principles', percentage: 70, category: 'Machine Learning', color: 'bg-purple-500' },
-  { name: 'Deep Learning', percentage: 50, category: 'Machine Learning', color: 'bg-pink-500' },
-  { name: 'PyTorch', percentage: 75, category: 'Machine Learning', color: 'bg-orange-500' },
-  { name: 'Hugging Face', percentage: 65, category: 'Machine Learning', color: 'bg-yellow-400' },
+  { name: 'Machine Learning Principles', percentage: 70, category: 'Machine Learning', color: 'bg-purple-600' },
+  { name: 'Deep Learning', percentage: 50, category: 'Machine Learning', color: 'bg-pink-600' },
+  { name: 'PyTorch', percentage: 75, category: 'Machine Learning', color: 'bg-red-600' },
+  { name: 'Hugging Face', percentage: 65, category: 'Machine Learning', color: 'bg-amber-500' },
   
   // Frontend
-  { name: 'Next.js', percentage: 70, category: 'Frontend', color: 'bg-green-500' },
-  { name: 'React', percentage: 80, category: 'Frontend', color: 'bg-sky-500' },
+  { name: 'Next.js', percentage: 70, category: 'Frontend', color: 'bg-slate-700' },
+  { name: 'React', percentage: 80, category: 'Frontend', color: 'bg-cyan-500' },
   { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', color: 'bg-teal-500' },
-  { name: 'HTML/CSS', percentage: 90, category: 'Frontend', color: 'bg-red-500' },
+  { name: 'HTML/CSS', percentage: 90, category: 'Frontend', color: 'bg-rose-500' },
 
   // Backend
   { name: 'Node.js', percentage: 70, category: 'Backend', color: 'bg-green-600' },
-  { name: 'Express.js', percentage: 65, category: 'Backend', color: 'bg-gray-500' },
+  { name: 'Express.js', percentage: 65, category: 'Backend', color: 'bg-neutral-500' },
 
   // Database
-  { name: 'MongoDB', percentage: 60, category: 'Database', color: 'bg-green-700' },
+  { name: 'MongoDB', percentage: 60, category: 'Database', color: 'bg-emerald-600' },
   { name: 'PostgreSQL', percentage: 55, category: 'Database', color: 'bg-blue-700' },
 
   // DevOps
-  { name: 'Docker', percentage: 60, category: 'DevOps', color: 'bg-sky-600' },
-  { name: 'Git & GitHub', percentage: 85, category: 'DevOps', color: 'bg-orange-600' },
+  { name: 'Docker', percentage: 60, category: 'DevOps', color: 'bg-sky-700' },
+  { name: 'Git & GitHub', percentage: 85, category: 'DevOps', color: 'bg-zinc-600' },
   
   // Design
-  { name: 'Figma', percentage: 70, category: 'Design', color: 'bg-purple-600' },
+  { name: 'Figma', percentage: 70, category: 'Design', color: 'bg-fuchsia-500' },
 ];
 
 export interface ProfileLink {
@@ -152,7 +152,7 @@ export interface Event {
 }
 
 export const eventsData: Event[] = [
-  {
+   {
     id: '1',
     title: 'Keynote Speaker at Tech Innovators Summit 2023',
     images: [

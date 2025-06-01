@@ -88,7 +88,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="md:col-span-1 flex flex-col items-center md:items-center space-y-6 animate-fade-in-right mt-8 md:mt-0">
+          <div className="md:col-span-1 flex flex-col items-center space-y-6 animate-fade-in-right mt-8 md:mt-0">
             <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72">
               <Image
                 src="https://placehold.co/400x400.png"
@@ -137,7 +137,7 @@ export default function HomePage() {
           <div className="space-y-12">
             {sortedSkillCategories.map((category) => (
               <div key={category}>
-                <h3 className="text-xl font-semibold font-headline mb-6 text-primary">
+                <h3 className="text-xl font-semibold font-headline mb-6 text-foreground">
                   {category}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
