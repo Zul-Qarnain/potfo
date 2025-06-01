@@ -25,10 +25,10 @@ export interface ProfileLink {
 }
 
 export const profileLinks: ProfileLink[] = [
-  { name: 'Google Scholar', url: 'https://scholar.google.com/citations?user=RebPXvAAAAAJ&hl=en&authuser=3', icon: 'GraduationCap', ariaLabel: 'View Google Scholar profile' },
-  { name: 'GitHub', url: 'https://github.com/Zul-Qarnain', icon: 'Github', ariaLabel: 'View GitHub profile' },
-  { name: 'ResearchGate', url: 'https://www.researchgate.net/profile/Mohammad-Hossian-2?ev=hdr_xprf', icon: 'FlaskConical', ariaLabel: 'View ResearchGate profile' },
-  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/zul-qarnain20/', icon: 'Linkedin', ariaLabel: 'View LinkedIn profile' },
+  { name: 'Google Scholar', url: 'https://scholar.google.com/citations?user=RebPXvAAAAAJ&hl=en&authuser=3', icon: 'GraduationCap', ariaLabel: 'View Google Scholar profile for Mohammad Shihab Hossain' },
+  { name: 'GitHub', url: 'https://github.com/Zul-Qarnain', icon: 'Github', ariaLabel: 'View GitHub profile for Mohammad Shihab Hossain' },
+  { name: 'ResearchGate', url: 'https://www.researchgate.net/profile/Mohammad-Hossian-2?ev=hdr_xprf', icon: 'FlaskConical', ariaLabel: 'View ResearchGate profile for Mohammad Shihab Hossain' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/zul-qarnain20/', icon: 'Linkedin', ariaLabel: 'View LinkedIn profile for Mohammad Shihab Hossain' },
 ];
 
 export const educationData = {
@@ -75,37 +75,46 @@ export interface Project {
   description: string;
   techStack: string[];
   githubLink: string;
-  image: string; // Placeholder image URL
+  image: string; 
   imageHint: string;
 }
 
 export const projectsData: Project[] = [
   {
     id: '1',
-    title: 'AI-Powered Code Review Assistant',
-    description: 'A tool that uses machine learning to analyze code changes and provide intelligent suggestions for improvement.',
-    techStack: ['Python', 'PyTorch', 'Flask', 'Docker'],
-    githubLink: '#', // Replace with actual GitHub link
+    title: 'AI & Robotics Landing Page',
+    description: 'A modern landing page showcasing concepts in Artificial Intelligence and Robotics, built with Next.js and Tailwind CSS.',
+    techStack: ['Next.js', 'React', 'Tailwind CSS'],
+    githubLink: 'https://github.com/VirsysX/landingpage',
     image: 'https://placehold.co/600x400.png',
-    imageHint: 'code abstract'
+    imageHint: 'website ai'
   },
   {
     id: '2',
-    title: 'Personal Portfolio Website (This one!)',
-    description: 'A modern, responsive portfolio built with Next.js, Tailwind CSS, and TypeScript.',
-    techStack: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript'],
-    githubLink: '#',
+    title: 'VirsysNFT Marketplace Demo',
+    description: 'A demonstration NFT marketplace website, exploring digital asset trading. Built with Next.js and Tailwind CSS.',
+    techStack: ['Next.js', 'React', 'Tailwind CSS'],
+    githubLink: 'https://github.com/VirsysX/virsysnft',
     image: 'https://placehold.co/600x400.png',
-    imageHint: 'website design'
+    imageHint: 'nft marketplace'
   },
   {
     id: '3',
-    title: 'Decentralized Social Network Prototype',
-    description: 'An exploration of building a social media platform on decentralized technologies for enhanced user privacy.',
-    techStack: ['Solidity', 'IPFS', 'React', 'Node.js'],
-    githubLink: '#',
+    title: 'PixelRacer 2D Game',
+    description: 'A fast-paced, top-down 2D car dodging game built with Three.js. Avoid traffic, collect coins, and chase high scores!',
+    techStack: ['Three.js', 'JavaScript', 'HTML5'],
+    githubLink: 'https://github.com/Zul-Qarnain/PixelRacer',
     image: 'https://placehold.co/600x400.png',
-    imageHint: 'network abstract'
+    imageHint: 'game car'
+  },
+  {
+    id: '4',
+    title: 'Sanda-AI Discord Bot',
+    description: "An AI-powered Discord bot with a 'savage' personality, designed to reply to users with witty and sharp tones. Built with Python.",
+    techStack: ['Python', 'Discord.py'],
+    githubLink: 'https://github.com/Zul-Qarnain/Sanda-AI',
+    image: 'https://placehold.co/600x400.png',
+    imageHint: 'discord bot'
   },
 ];
 
