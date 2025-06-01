@@ -13,12 +13,14 @@ interface EventCardProps {
 }
 
 export function EventCard({ event }: EventCardProps) {
+  const primaryImage = event.images && event.images.length > 0 ? event.images[0] : 'https://placehold.co/600x400.png';
+
   return (
     <Dialog>
       <div className="bg-card rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl border border-border hover:border-primary/50 flex flex-col h-full group">
         <div className="relative w-full h-48 sm:h-56">
           <Image
-            src={event.image}
+            src={primaryImage}
             alt={event.title}
             layout="fill"
             objectFit="cover"
@@ -49,7 +51,7 @@ export function EventCard({ event }: EventCardProps) {
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-2xl font-headline">{event.title}</DialogTitle>
-          <DialogDescription className="text-sm">
+          <DialogDescription asChild>
             <span className="flex items-center text-xs text-muted-foreground mt-1 mb-1">
                 <CalendarDays className="h-3.5 w-3.5 mr-1.5" /> {event.date}
                 <span className="mx-2">|</span>
@@ -57,16 +59,38 @@ export function EventCard({ event }: EventCardProps) {
             </span>
           </DialogDescription>
         </DialogHeader>
-        <div className="relative w-full h-64 rounded-md overflow-hidden my-4 flex-shrink-0">
-             <Image
-                src={event.image}
-                alt={event.title}
-                layout="fill"
-                objectFit="cover"
-                data-ai-hint={event.imageHint}
-            />
-        </div>
-        <ScrollArea className="flex-grow pr-2 -mr-4"> {/* pr-2 and -mr-4 to give space for scrollbar without shifting content */}
+
+        {event.images && event.images.length > 0 && (
+          <div className="my-4 flex-shrink-0">
+            {event.images.length === 1 ? (
+              <div className="relative w-full h-64 rounded-md overflow-hidden">
+                <Image 
+                  src={event.images[0]} 
+                  alt={event.title} 
+                  layout="fill" 
+                  objectFit="cover" 
+                  data-ai-hint={event.imageHint} 
+                />
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2 max-h-80 overflow-y-auto"> {/* Simple grid for multiple images */}
+                {event.images.map((imgSrc, index) => (
+                  <div key={index} className="relative aspect-video rounded-md overflow-hidden">
+                    <Image 
+                      src={imgSrc} 
+                      alt={`${event.title} - image ${index + 1}`} 
+                      layout="fill" 
+                      objectFit="cover" 
+                      data-ai-hint={index === 0 ? event.imageHint : 'event gallery image'}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        
+        <ScrollArea className="flex-grow pr-2 -mr-4">
           <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
             {event.story}
           </p>

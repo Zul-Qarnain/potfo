@@ -130,8 +130,8 @@ export const projectsData: Project[] = [
 export interface Event {
   id: string;
   title: string;
-  image: string; // Placeholder image URL
-  imageHint: string;
+  images: string[]; // Changed from image: string
+  imageHint: string; // Hint for the primary/first image
   date: string;
   location: string;
   description: string; // Short description for card
@@ -142,7 +142,10 @@ export const eventsData: Event[] = [
   {
     id: '1',
     title: 'Keynote Speaker at Tech Innovators Summit 2023',
-    image: 'https://placehold.co/600x400.png',
+    images: [
+        'https://placehold.co/600x400.png',
+        'https://placehold.co/600x400.png?a=2'
+    ],
     imageHint: 'conference stage',
     date: 'November 15, 2023',
     location: 'San Francisco, CA',
@@ -152,7 +155,7 @@ export const eventsData: Event[] = [
   {
     id: '2',
     title: 'Presented Research at NeurIPS 2022',
-    image: 'https://placehold.co/600x400.png',
+    images: ['https://placehold.co/600x400.png'],
     imageHint: 'poster session',
     date: 'December 5, 2022',
     location: 'New Orleans, LA',
@@ -162,12 +165,26 @@ export const eventsData: Event[] = [
   {
     id: '3',
     title: 'Hackathon Winner - AI for Good Challenge',
-    image: 'https://placehold.co/600x400.png',
+    images: [
+        'https://placehold.co/600x400.png',
+        'https://placehold.co/600x400.png?a=3',
+        'https://placehold.co/600x400.png?a=4'
+    ],
     imageHint: 'team award',
     date: 'May 20, 2022',
     location: 'Virtual Event',
     description: 'Our team won first place for developing an AI solution to improve accessibility for visually impaired individuals.',
     story: 'The AI for Good Challenge was an intense but rewarding 48-hour hackathon. Our team collaborated remotely to build a prototype that uses computer vision and natural language processing to describe surroundings for visually impaired users. Winning the challenge was a fantastic validation of our hard work and the potential of AI to create positive social impact.',
+  },
+  {
+    id: '4',
+    title: 'Workshop on Advanced Python',
+    images: ['https://placehold.co/600x400.png'],
+    imageHint: 'coding workshop',
+    date: 'July 10, 2023',
+    location: 'Online',
+    description: 'Led a hands-on workshop covering advanced Python features and best practices for software development.',
+    story: 'This online workshop attracted over 100 participants eager to deepen their Python knowledge. We covered topics like decorators, generators, context managers, and asynchronous programming. The interactive coding sessions were a highlight, allowing attendees to apply concepts in real-time. It was great to see so much enthusiasm for learning and sharing knowledge within the Python community.',
   },
 ];
 
