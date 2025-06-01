@@ -32,16 +32,10 @@ export default function HomePage() {
               </h1>
               <div className="mt-6 text-lg text-muted-foreground max-w-2xl space-y-4">
                 <p>
-                  I am a highly motivated and aspiring AI researcher with a strong background in deep learning, quantum computing, and web development. Over the past year, I have gained extensive experience in web development using React, application development, and have achieved proficiency in 14 programming languages. I have hands-on experience with PyTorch and large language models (LLMs), and I have also published a research paper focusing on Artificial Intelligence and LLMs.
+                  I’m an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I’ve built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I&apos;m fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
                 </p>
                 <p>
-                  My aspiration is to harness the power of AI to address some of the most pressing challenges of our time—such as cancer treatment, renewable energy solutions, and longevity—through the integration of AI with quantum physics, a field often referred to as Quantum AI. I am deeply interested in how AI can be used to create innovative, transformative solutions that contribute to a better future.
-                </p>
-                <p>
-                  Currently, I am pursuing my undergraduate degree in Computer Science at American International University-Bangladesh (AIUB). My academic focus is on advancing computing technologies and making everyday life easier through intelligent, cutting-edge systems.
-                </p>
-                <p>
-                  I am committed to continuing my research in AI and quantum computing, with a goal of contributing to pioneering innovations that solve real-world problems and shape the future of technology.
+                  I’m currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
                 </p>
               </div>
             </div>
