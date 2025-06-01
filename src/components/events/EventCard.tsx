@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -49,11 +50,11 @@ export function EventCard({ event }: EventCardProps) {
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-2xl font-headline">{event.title}</DialogTitle>
           <DialogDescription className="text-sm">
-            <div className="flex items-center text-xs text-muted-foreground mt-1 mb-1">
+            <span className="flex items-center text-xs text-muted-foreground mt-1 mb-1">
                 <CalendarDays className="h-3.5 w-3.5 mr-1.5" /> {event.date}
                 <span className="mx-2">|</span>
                 <MapPin className="h-3.5 w-3.5 mr-1.5" /> {event.location}
-            </div>
+            </span>
           </DialogDescription>
         </DialogHeader>
         <div className="relative w-full h-64 rounded-md overflow-hidden my-4 flex-shrink-0">
