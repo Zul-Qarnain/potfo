@@ -19,7 +19,7 @@ export const skillsData: Skill[] = [
   { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'Sigma', iconClasses: 'text-blue-500', color: 'bg-blue-500' },
 
   // Programming Languages
-  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-yellow-400', color: 'bg-amber-400' },
+  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-yellow-400', color: 'bg-blue-500' },
   { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', iconClasses: 'text-green-500', color: 'bg-green-500' },
   { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-blue-500', color: 'bg-sky-400' },
   
