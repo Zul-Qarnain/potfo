@@ -60,30 +60,12 @@ export interface Publication {
 export const publicationsData: Publication[] = [
   {
     id: '1',
-    title: 'Advanced Deep Learning Techniques for Image Recognition',
-    authors: 'Mohammad Shihab Hossain, Co Author 1, Co Author 2',
-    venue: 'Journal of Machine Learning Research (JMLR)',
-    date: 'October 2023',
-    link: '#', // Replace with actual link
-    type: 'Journal',
-  },
-  {
-    id: '2',
-    title: 'Scalable Algorithms for Big Data Analytics',
-    authors: 'Mohammad Shihab Hossain, Co Author 3',
-    venue: 'Proceedings of the International Conference on Data Mining (ICDM)',
-    date: 'December 2022',
-    link: '#',
+    title: 'A large Language Model is not the Right Path to Bring Artificial General Intelligence',
+    authors: 'Md. Mobin Chowdhury, Mohammad Shihab Hossain, Md. Faruk Abdullah Al Sohan',
+    venue: '7th IEOM Bangladesh International Conference on Industrial Engineering and Operations Management, AIUB Campus, Dhaka',
+    date: 'December 2024',
+    link: 'https://www.researchgate.net/publication/389855793_A_large_Language_Model_is_not_the_Right_Path_to_Bring_Artificial_General_Intelligence',
     type: 'Conference',
-  },
-  {
-    id: '3',
-    title: 'Exploring the Frontiers of Quantum Computing',
-    authors: 'Mohammad Shihab Hossain',
-    venue: 'Nature Physics',
-    date: 'June 2022',
-    link: '#',
-    type: 'Journal',
   },
 ];
 
@@ -130,12 +112,12 @@ export const projectsData: Project[] = [
 export interface Event {
   id: string;
   title: string;
-  images: string[]; // Changed from image: string
-  imageHint: string; // Hint for the primary/first image
+  images: string[];
+  imageHint: string;
   date: string;
   location: string;
-  description: string; // Short description for card
-  story: string; // Longer story for modal
+  description: string;
+  story: string;
 }
 
 export const eventsData: Event[] = [
@@ -203,3 +185,5 @@ export const contactSectionData = {
 };
 
 export const resumeUrl = "/resume.pdf"; // Path to your resume in the public folder
+
+    
