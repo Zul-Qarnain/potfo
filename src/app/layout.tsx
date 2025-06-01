@@ -47,7 +47,7 @@ export default function RootLayout({
       <body className="font-body antialiased flex flex-col min-h-screen">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark" /* Changed to dark to make Dracula the default */
           enableSystem
           disableTransitionOnChange
         >
