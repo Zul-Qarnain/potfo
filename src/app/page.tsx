@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -27,7 +28,7 @@ export default function HomePage() {
           <div className="md:col-span-2 space-y-8">
             <div className="animate-fade-in-up">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-headline leading-tight">
-                Hi, I&apos;m <span className="text-primary">Your Name</span>
+                Hi, I&apos;m <span className="text-primary">Mohammad Shihab Hossain</span>
               </h1>
               <p className="mt-4 text-lg sm:text-xl text-muted-foreground max-w-2xl">
                 A passionate Computer Science researcher specializing in Artificial Intelligence and Machine Learning. Welcome to my personal space where I share my work, projects, and journey.
@@ -64,7 +65,7 @@ export default function HomePage() {
             <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72">
               <Image
                 src="https://placehold.co/400x400.png"
-                alt="Your Name - Profile Picture"
+                alt="Mohammad Shihab Hossain - Profile Picture"
                 width={400}
                 height={400}
                 className="rounded-full object-cover border-4 border-primary shadow-lg"

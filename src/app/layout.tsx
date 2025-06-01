@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Navbar } from '@/components/Navbar';
@@ -7,13 +8,13 @@ import { Toaster } from "@/components/ui/toaster"; // For contact form messages
 
 export const metadata: Metadata = {
   title: {
-    default: 'Persona | Your Name - Personal Portfolio',
+    default: 'Persona | Mohammad Shihab Hossain - Personal Portfolio',
     template: '%s | Persona',
   },
-  description: 'A modern, visually stunning personal portfolio for Your Name, showcasing skills, projects, publications, and events.',
+  description: 'A modern, visually stunning personal portfolio for Mohammad Shihab Hossain, showcasing skills, projects, publications, and events.',
   openGraph: {
-    title: 'Persona | Your Name - Personal Portfolio',
-    description: 'Explore the professional journey of Your Name.',
+    title: 'Persona | Mohammad Shihab Hossain - Personal Portfolio',
+    description: 'Explore the professional journey of Mohammad Shihab Hossain.',
     type: 'website',
     locale: 'en_US',
     url: 'https://your-domain.com', // Replace with actual domain

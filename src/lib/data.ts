@@ -33,13 +33,13 @@ export const profileLinks: ProfileLink[] = [
 
 export const educationData = {
   icon: 'School',
-  university: 'Stanford University', // Replace with actual university
-  major: 'Ph.D. in Computer Science', // Replace with actual major
+  university: 'American International University - Bangladesh (AIUB)',
+  major: 'BSc in Computer Science and Engineering',
 };
 
 export const experienceData = {
   icon: 'Briefcase',
-  summary: "Currently a Research Intern at XYZ Corp, focusing on applications of generative AI in natural language understanding. Previously worked on distributed machine learning systems at ABC Inc. Passionate about bridging the gap between theoretical research and real-world applications.",
+  summary: "Skilled in Cybersecurity Engineering, AI/ML Engineering, and Research. Dedicated to leveraging these expertises to develop innovative solutions and contribute to impactful projects.",
 };
 
 export const skillsSectionData = {
@@ -61,7 +61,7 @@ export const publicationsData: Publication[] = [
   {
     id: '1',
     title: 'Advanced Deep Learning Techniques for Image Recognition',
-    authors: 'Your Name, Co Author 1, Co Author 2',
+    authors: 'Mohammad Shihab Hossain, Co Author 1, Co Author 2',
     venue: 'Journal of Machine Learning Research (JMLR)',
     date: 'October 2023',
     link: '#', // Replace with actual link
@@ -70,7 +70,7 @@ export const publicationsData: Publication[] = [
   {
     id: '2',
     title: 'Scalable Algorithms for Big Data Analytics',
-    authors: 'Your Name, Co Author 3',
+    authors: 'Mohammad Shihab Hossain, Co Author 3',
     venue: 'Proceedings of the International Conference on Data Mining (ICDM)',
     date: 'December 2022',
     link: '#',
@@ -79,7 +79,7 @@ export const publicationsData: Publication[] = [
   {
     id: '3',
     title: 'Exploring the Frontiers of Quantum Computing',
-    authors: 'Your Name',
+    authors: 'Mohammad Shihab Hossain',
     venue: 'Nature Physics',
     date: 'June 2022',
     link: '#',
@@ -155,7 +155,7 @@ export const eventsData: Event[] = [
   {
     id: '2',
     title: 'Presented Research at NeurIPS 2022',
-    images: ['https://placehold.co/600x400.png'],
+    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png?a=extra'],
     imageHint: 'poster session',
     date: 'December 5, 2022',
     location: 'New Orleans, LA',
@@ -179,13 +179,23 @@ export const eventsData: Event[] = [
   {
     id: '4',
     title: 'Workshop on Advanced Python',
-    images: ['https://placehold.co/600x400.png'],
+    images: ['https://placehold.co/600x400.png?a=workshop'],
     imageHint: 'coding workshop',
     date: 'July 10, 2023',
     location: 'Online',
     description: 'Led a hands-on workshop covering advanced Python features and best practices for software development.',
     story: 'This online workshop attracted over 100 participants eager to deepen their Python knowledge. We covered topics like decorators, generators, context managers, and asynchronous programming. The interactive coding sessions were a highlight, allowing attendees to apply concepts in real-time. It was great to see so much enthusiasm for learning and sharing knowledge within the Python community.',
   },
+  {
+    id: '5',
+    title: 'Panelist at Future of Work Conference',
+    images: ['https://placehold.co/600x400.png?a=panel'],
+    imageHint: 'panel discussion',
+    date: 'September 5, 2021',
+    location: 'Virtual',
+    description: 'Discussed the evolving landscape of tech careers and the skills needed for future success.',
+    story: 'Joining the panel on the Future of Work was a thought-provoking experience. We delved into how automation, AI, and remote collaboration are reshaping industries. I shared my perspectives on the importance of continuous learning and adaptability for professionals navigating these changes. The audience interaction was fantastic, with many questions about upskilling and career transitions.',
+  }
 ];
 
 export const contactSectionData = {
