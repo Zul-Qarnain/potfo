@@ -1,10 +1,25 @@
 import React from 'react';
-import * as LucideIcons from 'lucide-react';
+import { 
+  Flame, 
+  Smile, 
+  Sigma, 
+  Braces, 
+  Code2, 
+  FileText, 
+  Atom, 
+  Triangle, 
+  Layout, 
+  Palette, 
+  BoxSelect, 
+  Server, 
+  Database, 
+  DatabaseZap,
+  HelpCircle // Added HelpCircle for fallback
+} from 'lucide-react';
 
-// Helper function to get Lucide icon component by name
-const getIcon = (iconName: string): React.ElementType => {
-  const IconComponent = (LucideIcons as any)[iconName];
-  return IconComponent || LucideIcons.HelpCircle; // Fallback icon
+const iconMap: { [key: string]: React.ElementType } = {
+  Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle, Layout, 
+  Palette, BoxSelect, Server, Database, DatabaseZap, HelpCircle
 };
 
 interface SkillBarProps {
@@ -22,7 +37,7 @@ export const SkillBar: React.FC<SkillBarProps> = ({
   iconName,
   iconClasses = '',
 }) => {
-  const Icon = getIcon(iconName);
+  const Icon = iconMap[iconName] || iconMap.HelpCircle; // Use the map
 
   return (
     <div className="flex items-center space-x-4 p-4 bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-shadow duration-300">

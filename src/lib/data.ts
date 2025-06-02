@@ -146,62 +146,37 @@ export interface Event {
 }
 
 export const eventsData: Event[] = [
-   {
-    id: '1',
-    title: 'Keynote Speaker at Tech Innovators Summit 2023',
-    images: [
-        'https://placehold.co/600x400.png',
-        'https://placehold.co/600x400.png?a=2'
-    ],
-    imageHint: 'conference stage',
-    date: 'November 15, 2023',
-    location: 'San Francisco, CA',
-    description: 'Delivered a keynote on the future of AI and its societal impact.',
-    story: 'It was an honor to address a diverse audience of tech leaders, researchers, and enthusiasts at the Tech Innovators Summit. My talk focused on the ethical considerations and transformative potential of advanced AI systems. The Q&A session was particularly engaging, with insightful questions about AI governance and future research directions.',
-  },
-  {
-    id: '2',
-    title: 'Presented Research at NeurIPS 2022',
-    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png?a=extra'],
-    imageHint: 'poster session',
-    date: 'December 5, 2022',
-    location: 'New Orleans, LA',
-    description: 'Presented a paper on novel optimization techniques for large language models.',
-    story: 'Participating in NeurIPS 2022 was an incredible experience. I had the opportunity to present our latest research during a poster session, leading to many fruitful discussions with fellow researchers. The conference also provided a chance to learn about cutting-edge developments across various subfields of machine learning.',
-  },
-  {
-    id: '3',
-    title: 'Hackathon Winner - AI for Good Challenge',
-    images: [
-        'https://placehold.co/600x400.png',
-        'https://placehold.co/600x400.png?a=3',
-        'https://placehold.co/600x400.png?a=4'
-    ],
-    imageHint: 'team award',
-    date: 'May 20, 2022',
-    location: 'Virtual Event',
-    description: 'Our team won first place for developing an AI solution to improve accessibility for visually impaired individuals.',
-    story: 'The AI for Good Challenge was an intense but rewarding 48-hour hackathon. Our team collaborated remotely to build a prototype that uses computer vision and natural language processing to describe surroundings for visually impaired users. Winning the challenge was a fantastic validation of our hard work and the potential of AI to create positive social impact.',
-  },
-  {
-    id: '4',
-    title: 'Workshop on Advanced Python',
-    images: ['https://placehold.co/600x400.png?a=workshop'],
-    imageHint: 'coding workshop',
-    date: 'July 10, 2023',
-    location: 'Online',
-    description: 'Led a hands-on workshop covering advanced Python features and best practices for software development.',
-    story: 'This online workshop attracted over 100 participants eager to deepen their Python knowledge. We covered topics like decorators, generators, context managers, and asynchronous programming. The interactive coding sessions were a highlight, allowing attendees to apply concepts in real-time. It was great to see so much enthusiasm for learning and sharing knowledge within the Python community.',
-  },
   {
     id: '5',
-    title: 'Panelist at Future of Work Conference',
-    images: ['https://placehold.co/600x400.png?a=panel'],
-    imageHint: 'panel discussion',
-    date: 'September 5, 2021',
-    location: 'Virtual',
-    description: 'Discussed the evolving landscape of tech careers and the skills needed for future success.',
-    story: 'Joining the panel on the Future of Work was a thought-provoking experience. We delved into how automation, AI, and remote collaboration are reshaping industries. I shared my perspectives on the importance of continuous learning and adaptability for professionals navigating these changes. The audience interaction was fantastic, with many questions about upskilling and career transitions.',
+    title: 'Presentation on Paper',
+    date: 'December 21, 2024',
+    location: 'American International University - Bangladesh (AIUB)',
+    description: 'Presented a paper on novel optimization techniques for large language models.',
+    story: 'Thrilled to present our paper "A Large Language Model is Not the Right Path to Bring Artificial General Intelligence" at the 7th International Conference on Industrial Engineering and Operations Management (IEOM), held in Dhaka, Bangladesh. Our work challenges the prevailing assumptions about LLMs and AGI — offering a fresh perspective for researchers, developers, and strategists shaping the future of AI.',
+  },
+  {
+    id: '6',
+    title: 'Winners of Best AI Project',
+    date: 'March 13, 2022',
+    location: 'Notre Dame College, Dhaka',
+    description: 'Our team won first place for developing an AI solution to improve accessibility for visually impaired individuals.',
+    story: 'Proud to secure 1st place in the Best IT Project Competition at the Notre Dame Annual Science Festival 2021, with our groundbreaking AI project "VirsysAI" — an innovative conversational system developed a year before ChatGPT emerged. VirsysAI demonstrated early promise in natural language interaction and generative intelligence, reflecting our forward-thinking approach to AI development.',
+  },
+  {
+    id: '7',
+    title: 'Awarded 3rd Place in Web Design Competition',
+    date: 'March 13, 2022',
+    location: 'Notre Dame College, Dhaka',
+    description: 'Developed a visually appealing and responsive website using Next.js and Tailwind CSS.',
+    story: 'Developed a visually appealing and responsive website using Next.js and Tailwind CSS. The design process began in Figma, where we created a clean and modern UI, which was later transformed into a fully functional web application. The project focused on showcasing concepts related to Artificial Intelligence and Robotics, serving as a demo website. The final product was successfully deployed on Vercel, ensuring fast performance and scalability.',
+  },
+  {
+    id: '8',
+    title: 'Winners of Best IT Project',
+    date: 'May 15, 2022',
+    location: 'Govt. Science College, Tejgaon, Dhaka',
+    description: 'Our team won first place once again in the Best IT Project Competition at the 10th National Scientist Mania 2022, with our pioneering AI system "VirsysAI" — a conversational AI developed a year before ChatGPT.',
+    story: 'Honored to secure 1st place once again in the Best IT Project Competition at the 10th National Scientist Mania 2022, with our pioneering AI system "VirsysAI" — a conversational AI developed a year before ChatGPT. VirsysAI stood out for its early capabilities in natural language understanding, reinforcing our commitment to innovation in artificial intelligence.',
   }
 ];
 
@@ -209,6 +184,6 @@ export const contactSectionData = {
   note: "I’ll get back to you as soon as possible.",
 };
 
-export const resumeUrl = "/resume.pdf"; 
+export const resumeUrl = "/resume.pdf";
 
     

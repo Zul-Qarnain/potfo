@@ -1,16 +1,38 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { SkillBar } from '@/components/home/SkillBar';
 import { skillsData, profileLinks, educationData, experienceData, resumeUrl } from '@/lib/data';
 import type { Skill } from '@/lib/data';
-import * as LucideIcons from 'lucide-react';
+import {
+  Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle,
+  Layout, Palette, BoxSelect, Server, Database, DatabaseZap,
+  GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase,
+  Settings2, HelpCircle
+} from 'lucide-react';
 
-// Helper function to get Lucide icon component by name
-const getIcon = (iconName: string): React.ElementType => {
-  const IconComponent = (LucideIcons as any)[iconName];
-  return IconComponent || LucideIcons.HelpCircle; // Fallback icon
+// Map icon names to components
+const iconComponents: { [key: string]: React.ElementType } = {
+  Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle,
+  Layout, Palette, BoxSelect, Server, Database, DatabaseZap,
+  GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase,
+  Settings2, HelpCircle
 };
+
+// Renamed from getIconComponent to getIcon
+const getIcon = (iconName: string): React.ElementType => {
+  return iconComponents[iconName] || HelpCircle; // Fallback icon
+};
+
+// The following problematic getIcon function has been removed as it was causing a ReferenceError.
+// // Removed the original getIcon helper function
+// // import * as LucideIcons from 'lucide-react';
+// // Helper function to get Lucide icon component by name
+// const getIcon = (iconName: string): React.ElementType => {
+//   const IconComponent = (LucideIcons as any)[iconName];
+//   return IconComponent || LucideIcons.HelpCircle; // Fallback icon
+// };
 
 interface GroupedSkills {
   [category: string]: Skill[];
@@ -26,7 +48,7 @@ const updatedSkillsData: Skill[] = [
   { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'Sigma', color: 'bg-blue-500', iconClasses: 'text-blue-500' },
   
   // Programming Languages
-  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', color: 'bg-yellow-400', iconClasses: 'text-yellow-400' },
+  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', color: 'bg-blue-500', iconClasses: 'text-yellow-400' },
   { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', color: 'bg-indigo-500', iconClasses: 'text-green-500' },
   { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', color: 'bg-sky-400', iconClasses: 'text-blue-500' },
   
@@ -81,10 +103,10 @@ export default function HomePage() {
               </h1>
               <div className="mt-6 text-lg text-muted-foreground max-w-2xl space-y-4">
                 <p>
-                  I&apos;m an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I&apos;ve built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I&apos;m fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
+                  I’m an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I’ve built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I'm fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
                 </p>
                 <p>
-                  I&apos;m currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
+                  I’m currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
                 </p>
               </div>
             </div>
@@ -122,7 +144,6 @@ export default function HomePage() {
                 width={400}
                 height={400}
                 className="rounded-full object-cover border-4 border-primary shadow-lg"
-                priority
                 data-ai-hint="profile portrait"
               />
             </div>
