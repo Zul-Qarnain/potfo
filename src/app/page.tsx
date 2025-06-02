@@ -11,15 +11,6 @@ import {
   GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase, Settings2, HelpCircle, Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare,
 } from 'lucide-react';
 
-// The following problematic getIcon function has been removed as it was causing a ReferenceError.
-// // Removed the original getIcon helper function
-// // import * as LucideIcons from 'lucide-react';
-// // Helper function to get Lucide icon component by name
-// const getIcon = (iconName: string): React.ElementType => {
-//   const IconComponent = (LucideIcons as any)[iconName];
-//   return IconComponent || LucideIcons.HelpCircle; // Fallback icon
-// };
-
 interface GroupedSkills {
   [category: string]: Skill[];
 }
@@ -129,12 +120,11 @@ export default function HomePage() {
           <div className="md:col-span-1 flex flex-col items-center space-y-6 animate-fade-in-right mt-8 md:mt-0 order-1 md:order-2">
             <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72">
               <Image
-                src="https://placehold.co/400x400.png"
+                src="/images/profile-pic.jpg" 
                 alt="Mohammad Shihab Hossain - Profile Picture"
                 width={400}
                 height={400}
                 className="rounded-full object-cover border-4 border-primary shadow-lg"
-                data-ai-hint="profile portrait"
               />
             </div>
             <div className="flex space-x-4">

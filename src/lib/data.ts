@@ -19,15 +19,15 @@ export const skillsData: Skill[] = [
   { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'Sigma', iconClasses: 'text-blue-500', color: 'bg-blue-500' },
 
   // Programming Languages
-  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-yellow-400', color: 'bg-yellow-400' },
+  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-yellow-400', color: 'bg-blue-500' },
   { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', iconClasses: 'text-green-500', color: 'bg-indigo-500' },
-  { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-blue-500', color: 'bg-sky-400' },
+  { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', iconClasses: 'text-blue-500', color: 'bg-sky-400' },
   
   // Frontend
   { name: 'React', percentage: 60, category: 'Frontend', icon: 'Atom', iconClasses: 'text-sky-500', color: 'bg-purple-500' },
   { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Triangle', iconClasses: 'text-foreground dark:text-white', color: 'bg-emerald-500' },
-  { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Code', iconClasses: 'text-orange-500', color: 'bg-orange-400' },
-  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Wind', iconClasses: 'text-purple-500', color: 'bg-pink-400' },
+  { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Layout', iconClasses: 'text-orange-500', color: 'bg-orange-400' },
+  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Palette', iconClasses: 'text-purple-500', color: 'bg-pink-400' },
   
   // Backend
   { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'BoxSelect', iconClasses: 'text-green-600', color: 'bg-lime-500' },
@@ -149,6 +149,8 @@ export const eventsData: Event[] = [
   {
     id: '5',
     title: 'Presentation on Paper',
+    images: ['/images/events/paper-presentation-event.jpg'], // Example local image
+    imageHint: 'paper presentation', // Hint for the new image
     date: 'December 21, 2024',
     location: 'American International University - Bangladesh (AIUB)',
     description: 'Presented a paper on novel optimization techniques for large language models.',
@@ -157,6 +159,8 @@ export const eventsData: Event[] = [
   {
     id: '6',
     title: 'Winners of Best AI Project',
+    images: ['https://placehold.co/600x400.png'], // Default placeholder
+    imageHint: 'AI project', // Generic hint
     date: 'March 13, 2022',
     location: 'Notre Dame College, Dhaka',
     description: 'Our team won first place for developing an AI solution to improve accessibility for visually impaired individuals.',
@@ -165,6 +169,8 @@ export const eventsData: Event[] = [
   {
     id: '7',
     title: 'Awarded 3rd Place in Web Design Competition',
+    images: ['https://placehold.co/600x400.png'], // Default placeholder
+    imageHint: 'web design', // Generic hint
     date: 'March 13, 2022',
     location: 'Notre Dame College, Dhaka',
     description: 'Developed a visually appealing and responsive website using Next.js and Tailwind CSS.',
@@ -173,6 +179,8 @@ export const eventsData: Event[] = [
   {
     id: '8',
     title: 'Winners of Best IT Project',
+    images: ['https://placehold.co/600x400.png'], // Default placeholder
+    imageHint: 'AI competition', // Generic hint
     date: 'May 15, 2022',
     location: 'Govt. Science College, Tejgaon, Dhaka',
     description: 'Our team won first place once again in the Best IT Project Competition at the 10th National Scientist Mania 2022, with our pioneering AI system "VirsysAI" — a conversational AI developed a year before ChatGPT.',
