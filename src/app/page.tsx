@@ -1,4 +1,5 @@
 import Image from 'next/image';
+export const dynamic = 'force-static';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { SkillBar } from '@/components/home/SkillBar';
