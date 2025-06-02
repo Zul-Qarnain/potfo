@@ -19,28 +19,30 @@ interface GroupedSkills {
 // Updated skills data with specific percentages and colors
 const updatedSkillsData: Skill[] = [
   // Machine Learning
-  { name: 'PyTorch', percentage: 60, category: 'Machine Learning', icon: 'Brain', color: '#ee4c2c', iconClasses: '' },
-  { name: 'Hugging Face', percentage: 50, category: 'Machine Learning', icon: 'Zap', color: '#ffcc02', iconClasses: '' },
-  { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'BarChart3', color: '#013243', iconClasses: '' },
+  { name: 'PyTorch', percentage: 60, category: 'Machine Learning', icon: 'Flame', color: 'bg-teal-400', iconClasses: 'text-orange-500' },
+  { name: 'Hugging Face', percentage: 50, category: 'Machine Learning', icon: 'Smile', color: 'bg-green-400', iconClasses: 'text-yellow-400' },
+  
+  // Data Science
+  { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'Sigma', color: 'bg-blue-500', iconClasses: 'text-blue-500' },
   
   // Programming Languages
-  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Code', color: '#f7df1e', iconClasses: '' },
-  { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'FileCode', color: '#3776ab', iconClasses: '' },
-  { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', color: '#3178c6', iconClasses: '' },
+  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', color: 'bg-yellow-400', iconClasses: 'text-yellow-400' },
+  { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', color: 'bg-indigo-500', iconClasses: 'text-green-500' },
+  { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', color: 'bg-sky-400', iconClasses: 'text-blue-500' },
   
   // Frontend
-  { name: 'React', percentage: 60, category: 'Frontend', icon: 'Component', color: '#61dafb', iconClasses: '' },
-  { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Globe', color: '#000000', iconClasses: '' },
-  { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Layout', color: '#e34f26', iconClasses: '' },
-  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Palette', color: '#06b6d4', iconClasses: '' },
+  { name: 'React', percentage: 60, category: 'Frontend', icon: 'Atom', color: 'bg-purple-500', iconClasses: 'text-sky-500' },
+  { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Triangle', color: 'bg-emerald-500', iconClasses: 'text-foreground dark:text-white' },
+  { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Layout', color: 'bg-orange-400', iconClasses: 'text-orange-500' },
+  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Palette', color: 'bg-pink-400', iconClasses: 'text-purple-500' },
   
   // Backend
-  { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'Server', color: '#339933', iconClasses: '' },
-  { name: 'Express', percentage: 70, category: 'Backend', icon: 'Layers', color: '#000000', iconClasses: '' },
+  { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'BoxSelect', color: 'bg-lime-500', iconClasses: 'text-green-600' },
+  { name: 'Express', percentage: 70, category: 'Backend', icon: 'Server', color: 'bg-slate-400', iconClasses: 'text-neutral-400' },
   
   // Database
-  { name: 'MongoDB', percentage: 50, category: 'Database', icon: 'Database', color: '#47a248', iconClasses: '' },
-  { name: 'PostgreSQL', percentage: 70, category: 'Database', icon: 'Table', color: '#336791', iconClasses: '' },
+  { name: 'MongoDB', percentage: 50, category: 'Database', icon: 'Database', color: 'bg-cyan-500', iconClasses: 'text-green-500' },
+  { name: 'PostgreSQL', percentage: 70, category: 'Database', icon: 'DatabaseZap', color: 'bg-sky-600', iconClasses: 'text-blue-600' },
 ];
 
 export default function HomePage() {
@@ -72,17 +74,17 @@ export default function HomePage() {
     <div className="bg-background text-foreground min-h-screen">
       <section id="home" className="section-container pt-12 md:pt-20">
         <div className="grid md:grid-cols-3 gap-12 items-start">
-          <div className="md:col-span-2 space-y-8">
+          <div className="md:col-span-2 space-y-8 order-2 md:order-1">
             <div className="animate-fade-in-up">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-headline leading-tight">
                 Hi, I&apos;m <span className="text-primary">Mohammad Shihab Hossain</span>
               </h1>
               <div className="mt-6 text-lg text-muted-foreground max-w-2xl space-y-4">
                 <p>
-                  I'm an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I've built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I&apos;m fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
+                  I&apos;m an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I&apos;ve built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I&apos;m fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
                 </p>
                 <p>
-                  I'm currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
+                  I&apos;m currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
                 </p>
               </div>
             </div>
@@ -112,7 +114,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="md:col-span-1 flex flex-col items-center space-y-6 animate-fade-in-right mt-8 md:mt-0">
+          <div className="md:col-span-1 flex flex-col items-center space-y-6 animate-fade-in-right mt-8 md:mt-0 order-1 md:order-2">
             <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72">
               <Image
                 src="https://placehold.co/400x400.png"
