@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare, Link as LinkIcon } from 'lucide-react'; // Import used icons directly
+import { Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare, Link as LinkIcon, HelpCircle } from 'lucide-react'; // Import used icons directly
 import { Badge } from '@/components/ui/badge';
 import type { Project } from '@/lib/data';
 
@@ -8,10 +8,10 @@ interface ProjectCardProps {
   project: Project;
 }
 
-const iconMap: { [key: string]: React.ElementType } = { Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare };
+const iconMap: { [key: string]: React.ElementType } = { Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare, HelpCircle };
 
 export function ProjectCard({ project }: ProjectCardProps) {
-  const Icon = getLucideIcon(project.icon);
+  const Icon = iconMap[project.icon] || iconMap.HelpCircle; // Use the map, fallback to HelpCircle
 
   return (
     <div className="bg-card rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center text-center h-full border border-border hover:border-primary/30">
