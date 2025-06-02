@@ -12,37 +12,37 @@ export interface Skill {
 
 export const skillsData: Skill[] = [
   // Machine Learning
-  { name: 'PyTorch', percentage: 60, category: 'Machine Learning', icon: 'Flame', iconClasses: 'text-orange-500', color: 'bg-teal-400' },
-  { name: 'Hugging Face', percentage: 50, category: 'Machine Learning', icon: 'Smile', iconClasses: 'text-yellow-400', color: 'bg-green-400' },
-
+  { name: 'PyTorch', percentage: 60, category: 'Machine Learning', icon: 'Flame', color: 'bg-teal-400', iconClasses: 'text-orange-500' },
+  { name: 'Hugging Face', percentage: 50, category: 'Machine Learning', icon: 'Smile', color: 'bg-green-400', iconClasses: 'text-yellow-400' },
+  
   // Data Science
-  { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'Sigma', iconClasses: 'text-blue-500', color: 'bg-blue-500' },
-  { name: 'Matplotlib', percentage: 60, category: 'Data Science', icon: 'PieChart', iconClasses: 'text-red-500', color: 'bg-red-400' }, // Changed icon to PieChart
-  { name: 'Pandas', percentage: 70, category: 'Data Science', icon: 'Table', iconClasses: 'text-cyan-600', color: 'bg-cyan-500' },
-  { name: 'Scikit-learn', percentage: 50, category: 'Data Science', icon: 'Settings2', iconClasses: 'text-orange-600', color: 'bg-orange-500' },
-
-
+  { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'Sigma', color: 'bg-blue-500', iconClasses: 'text-blue-500' },
+  { name: 'Matplotlib', percentage: 60, category: 'Data Science', icon: 'PieChart', color: 'bg-blue-600', iconClasses: 'text-blue-600' },
+  { name: 'Pandas', percentage: 70, category: 'Data Science', icon: 'Table', color: 'bg-purple-500', iconClasses: 'text-purple-600' },
+  { name: 'Scikit-learn', percentage: 50, category: 'Data Science', icon: 'TrendingUp', color: 'bg-orange-500', iconClasses: 'text-orange-600' },
+  
   // Programming Languages
-  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-yellow-400', color: 'bg-yellow-400' },
-  { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', iconClasses: 'text-green-500', color: 'bg-indigo-500' },
-  { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', iconClasses: 'text-blue-500', color: 'bg-sky-400' },
+  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', color: 'bg-yellow-400', iconClasses: 'text-yellow-400' },
+  { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', color: 'bg-indigo-500', iconClasses: 'text-green-500' },
+  { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', color: 'bg-sky-400', iconClasses: 'text-blue-500' },
+  { name: 'Java', percentage: 70, category: 'Programming Languages', icon: 'Coffee', color: 'bg-red-500', iconClasses: 'text-red-600' },
+  { name: 'C++', percentage: 90, category: 'Programming Languages', icon: 'Settings2', color: 'bg-blue-700', iconClasses: 'text-blue-700' },
   
   // Frontend
-  { name: 'React', percentage: 60, category: 'Frontend', icon: 'Atom', iconClasses: 'text-sky-500', color: 'bg-purple-500' },
-  { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Triangle', iconClasses: 'text-foreground dark:text-white', color: 'bg-emerald-500' },
-  { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Layout', iconClasses: 'text-orange-500', color: 'bg-orange-400' },
-  { name: 'Java', percentage: 70, category: 'Programming Languages', icon: 'Coffee', iconClasses: 'text-red-700', color: 'bg-red-600' },
-  { name: 'C++', percentage: 90, category: 'Programming Languages', icon: 'Activity', iconClasses: 'text-blue-700', color: 'bg-blue-600' }, // Corrected icon name to Activity
-  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Palette', iconClasses: 'text-purple-500', color: 'bg-pink-400' },
+  { name: 'React', percentage: 60, category: 'Frontend', icon: 'Atom', color: 'bg-purple-500', iconClasses: 'text-sky-500' },
+  { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Triangle', color: 'bg-emerald-500', iconClasses: 'text-foreground dark:text-white' },
+  { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Layout', color: 'bg-orange-400', iconClasses: 'text-orange-500' },
+  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Palette', color: 'bg-pink-400', iconClasses: 'text-purple-500' },
   
   // Backend
-  { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'BoxSelect', iconClasses: 'text-green-600', color: 'bg-lime-500' },
-  { name: 'Express', percentage: 70, category: 'Backend', icon: 'Server', iconClasses: 'text-neutral-400', color: 'bg-slate-400' },
-
-  // Database (New category from image)
-  { name: 'MongoDB', percentage: 50, category: 'Database', icon: 'Database', iconClasses: 'text-green-500', color: 'bg-cyan-500' },
-  { name: 'PostgreSQL', percentage: 70, category: 'Database', icon: 'DatabaseZap', iconClasses: 'text-blue-600', color: 'bg-sky-600' },
+  { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'BoxSelect', color: 'bg-lime-500', iconClasses: 'text-green-600' },
+  { name: 'Express', percentage: 70, category: 'Backend', icon: 'Server', color: 'bg-slate-400', iconClasses: 'text-neutral-400' },
+  
+  // Database
+  { name: 'MongoDB', percentage: 50, category: 'Database', icon: 'Database', color: 'bg-cyan-500', iconClasses: 'text-green-500' },
+  { name: 'PostgreSQL', percentage: 70, category: 'Database', icon: 'DatabaseZap', color: 'bg-sky-600', iconClasses: 'text-blue-600' },
 ];
+
 
 export interface ProfileLink {
   name: string;
@@ -155,8 +155,8 @@ export const eventsData: Event[] = [
   {
     id: '5',
     title: 'Presentation on Paper',
-    images: ['/images/events/paper-presentation-event.jpg'], // Example local image
-    imageHint: 'paper presentation', // Hint for the new image
+    images: ['/images/events/paper-presentation-event.jpg'], 
+    imageHint: 'paper presentation', 
     date: 'December 21, 2024',
     location: 'American International University - Bangladesh (AIUB)',
     description: 'Presented a paper on novel optimization techniques for large language models.',
@@ -165,8 +165,8 @@ export const eventsData: Event[] = [
   {
     id: '6',
     title: 'Winners of Best AI Project',
-    images: ['https://placehold.co/600x400.png'], // Default placeholder
-    imageHint: 'AI project', // Generic hint
+    images: ['/ndc-prize.jpg', '/ndc-prize-three.jpg'], 
+    imageHint: 'AI project', 
     date: 'March 13, 2022',
     location: 'Notre Dame College, Dhaka',
     description: 'Our team won first place for developing an AI solution to improve accessibility for visually impaired individuals.',
@@ -175,8 +175,8 @@ export const eventsData: Event[] = [
   {
     id: '7',
     title: 'Awarded 3rd Place in Web Design Competition',
-    images: ['https://placehold.co/600x400.png'], // Default placeholder
-    imageHint: 'web design', // Generic hint
+    images: ['/ndc-no-prize-three.jpg','/ndc-prize.jpg'], 
+    imageHint: 'web design', 
     date: 'March 13, 2022',
     location: 'Notre Dame College, Dhaka',
     description: 'Developed a visually appealing and responsive website using Next.js and Tailwind CSS.',
@@ -185,8 +185,8 @@ export const eventsData: Event[] = [
   {
     id: '8',
     title: 'Winners of Best IT Project',
-    images: ['https://placehold.co/600x400.png'], // Default placeholder
-    imageHint: 'AI competition', // Generic hint
+    images: ['https://placehold.co/600x400.png'], 
+    imageHint: 'AI competition', 
     date: 'May 15, 2022',
     location: 'Govt. Science College, Tejgaon, Dhaka',
     description: 'Our team won first place once again in the Best IT Project Competition at the 10th National Scientist Mania 2022, with our pioneering AI system "VirsysAI" — a conversational AI developed a year before ChatGPT.',
