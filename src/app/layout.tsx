@@ -44,6 +44,13 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
         <link rel="icon" href="/favicon.ico" />
+        {/* Script to prevent flash of incorrect theme */}
+        <script dangerouslySetInnerHTML={{
+          __html: `(function() {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.classList.add(theme);
+          })();`
+        }} />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
         <ThemeProvider
