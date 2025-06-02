@@ -77,7 +77,7 @@ export function Navbar() {
           </Link>
 
           {/* Desktop View: Combined Nav and Theme Toggle Container */}
-          <div className="hidden md:flex items-center bg-indigo-500/30 backdrop-blur-lg rounded-full px-8 py-3 space-x-12 mx-auto"> {/* Changed background to violet, added transparency, and used mx-auto to center */}
+          <div className="hidden md:flex items-center bg-indigo-500/30 backdrop-blur-lg rounded-full px-6 py-2 space-x-8 mx-auto"> {/* Changed background to violet, added transparency, used mx-auto to center, adjusted padding and space */}
             <nav className="flex items-center space-x-8">
               {navItems.map((item) => (
                 <Link
@@ -93,7 +93,11 @@ export function Navbar() {
                 </Link>
               ))}
             </nav>
-            <ThemeToggle /> {/* Moved ThemeToggle inside the main container */}
+          </div>
+
+          {/* Desktop View: Theme Toggle (outside the nav capsule) */}
+          <div className="hidden md:flex items-center bg-indigo-500/30 backdrop-blur-lg rounded-full p-2 ml-4"> {/* Styled as a separate rounded element with margin-left for spacing */}
+            <ThemeToggle />
           </div>
         </div>
       </div>

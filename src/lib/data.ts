@@ -17,9 +17,13 @@ export const skillsData: Skill[] = [
 
   // Data Science
   { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'Sigma', iconClasses: 'text-blue-500', color: 'bg-blue-500' },
+  { name: 'Matplotlib', percentage: 60, category: 'Data Science', icon: 'PieChart', iconClasses: 'text-red-500', color: 'bg-red-400' }, // Changed icon to PieChart
+  { name: 'Pandas', percentage: 70, category: 'Data Science', icon: 'Table', iconClasses: 'text-cyan-600', color: 'bg-cyan-500' },
+  { name: 'Scikit-learn', percentage: 50, category: 'Data Science', icon: 'Settings2', iconClasses: 'text-orange-600', color: 'bg-orange-500' },
+
 
   // Programming Languages
-  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-yellow-400', color: 'bg-blue-500' },
+  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', iconClasses: 'text-yellow-400', color: 'bg-yellow-400' },
   { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', iconClasses: 'text-green-500', color: 'bg-indigo-500' },
   { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', iconClasses: 'text-blue-500', color: 'bg-sky-400' },
   
@@ -27,6 +31,8 @@ export const skillsData: Skill[] = [
   { name: 'React', percentage: 60, category: 'Frontend', icon: 'Atom', iconClasses: 'text-sky-500', color: 'bg-purple-500' },
   { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Triangle', iconClasses: 'text-foreground dark:text-white', color: 'bg-emerald-500' },
   { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Layout', iconClasses: 'text-orange-500', color: 'bg-orange-400' },
+  { name: 'Java', percentage: 70, category: 'Programming Languages', icon: 'Coffee', iconClasses: 'text-red-700', color: 'bg-red-600' },
+  { name: 'C++', percentage: 90, category: 'Programming Languages', icon: 'Activity', iconClasses: 'text-blue-700', color: 'bg-blue-600' }, // Corrected icon name to Activity
   { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Palette', iconClasses: 'text-purple-500', color: 'bg-pink-400' },
   
   // Backend

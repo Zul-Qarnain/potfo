@@ -14,12 +14,12 @@ import {
   Server, 
   Database, 
   DatabaseZap,
-  HelpCircle // Added HelpCircle for fallback
+  HelpCircle, Coffee, Activity, PieChart, Table, Settings2 // Changed Chart to PieChart
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
   Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle, Layout, 
-  Palette, BoxSelect, Server, Database, DatabaseZap, HelpCircle
+  Palette, BoxSelect, Server, Database, DatabaseZap, HelpCircle, Coffee, Activity, PieChart, Table, Settings2 // Changed Chart to PieChart
 };
 
 interface SkillBarProps {
