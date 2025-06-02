@@ -58,7 +58,7 @@ export function EventCard({ event }: EventCardProps) {
         </DialogHeader>
 
         {event.images && event.images.length > 0 && (
-          <div className="my-4 flex-shrink-0">
+          <div className="my-4 flex-shrink-0 min-h-[100px]"> {/* Added minimum height */}
             {event.images.length === 1 ? (
               <div className="relative w-full h-64 rounded-md overflow-hidden">
                 <Image 
@@ -87,7 +87,7 @@ export function EventCard({ event }: EventCardProps) {
           </div>
         )}
         
-        <ScrollArea className="flex-grow pr-2 -mr-4">
+        <ScrollArea className="flex-grow pr-2 -mr-4 min-h-[100px]"> {/* Added minimum height */}
           <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
             {event.story}
           </p>

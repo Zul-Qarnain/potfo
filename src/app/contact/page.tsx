@@ -1,6 +1,8 @@
-import { ContactForm } from '@/components/contact/ContactForm';
+
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Mail } from 'lucide-react';
+import ContactFormLoader from '@/components/contact/ContactFormLoader'; // Import the new client component
 
 export const metadata: Metadata = {
   title: 'Contact Me',
@@ -19,7 +21,9 @@ export default function ContactPage() {
           Have a question, a project idea, or just want to connect? Feel free to reach out. I&apos;m always open to discussing new opportunities and collaborations.
         </p>
       </div>
-      <ContactForm />
+      <Suspense fallback={<div className="text-center py-8">Preparing contact form...</div>}>
+        <ContactFormLoader />
+      </Suspense>
     </section>
   );
 }

@@ -8,22 +8,8 @@ import type { Skill } from '@/lib/data';
 import {
   Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle,
   Layout, Palette, BoxSelect, Server, Database, DatabaseZap,
-  GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase,
-  Settings2, HelpCircle
+  GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase, Settings2, HelpCircle, Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare,
 } from 'lucide-react';
-
-// Map icon names to components
-const iconComponents: { [key: string]: React.ElementType } = {
-  Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle,
-  Layout, Palette, BoxSelect, Server, Database, DatabaseZap,
-  GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase,
-  Settings2, HelpCircle
-};
-
-// Renamed from getIconComponent to getIcon
-const getIcon = (iconName: string): React.ElementType => {
-  return iconComponents[iconName] || HelpCircle; // Fallback icon
-};
 
 // The following problematic getIcon function has been removed as it was causing a ReferenceError.
 // // Removed the original getIcon helper function
@@ -37,6 +23,10 @@ const getIcon = (iconName: string): React.ElementType => {
 interface GroupedSkills {
   [category: string]: Skill[];
 }
+
+const iconComponents: { [key: string]: React.ElementType } = {
+  Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle, Layout, Palette, BoxSelect, Server, Database, DatabaseZap, GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase, Settings2, HelpCircle, Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare
+};
 
 // Updated skills data with specific percentages and colors
 const updatedSkillsData: Skill[] = [
@@ -68,8 +58,8 @@ const updatedSkillsData: Skill[] = [
 ];
 
 export default function HomePage() {
-  const EducationIcon = getIcon(educationData.icon);
-  const ExperienceIcon = getIcon(experienceData.icon);
+  const EducationIcon = iconComponents[educationData.icon] || HelpCircle;
+  const ExperienceIcon = iconComponents[experienceData.icon] || HelpCircle;
 
   const groupedSkills = updatedSkillsData.reduce<GroupedSkills>((acc, skill) => {
     const { category } = skill;
@@ -149,7 +139,7 @@ export default function HomePage() {
             </div>
             <div className="flex space-x-4">
               {profileLinks.map((link) => {
-                const Icon = getIcon(link.icon as string);
+                const Icon = iconComponents[link.icon] || HelpCircle;
                 return (
                   <Link
                     key={link.name}
