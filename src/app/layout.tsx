@@ -46,10 +46,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
         <ThemeProvider
-          attribute="class"
           defaultTheme="dark" /* Set to dark to make Dracula the default */
-          enableSystem
-          disableTransitionOnChange
         >
           <Navbar />
           <main className="flex-grow pt-20"> {/* pt-20 for fixed navbar height */}

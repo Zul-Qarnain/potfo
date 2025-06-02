@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,9 @@ import type { Skill } from '@/lib/data';
 import {
   Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle,
   Layout, Palette, BoxSelect, Server, Database, DatabaseZap,
-  GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase, Settings2, HelpCircle, Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare,
+  GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase, 
+  Settings2, HelpCircle, Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare,
+  Coffee, Activity, PieChart, Table, BarChart3, TrendingUp
 } from 'lucide-react';
 
 interface GroupedSkills {
@@ -16,7 +17,11 @@ interface GroupedSkills {
 }
 
 const iconComponents: { [key: string]: React.ElementType } = {
-  Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle, Layout, Palette, BoxSelect, Server, Database, DatabaseZap, GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase, Settings2, HelpCircle, Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare
+  Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle, Layout, 
+  Palette, BoxSelect, Server, Database, DatabaseZap, GraduationCap, Github, 
+  FlaskConical, Linkedin, School, Briefcase, Settings2, HelpCircle, Bot, 
+  GalleryHorizontalEnd, Gamepad2, MessageSquare, Coffee, Activity, PieChart, 
+  Table, BarChart3, TrendingUp
 };
 
 // Updated skills data with specific percentages and colors
@@ -27,11 +32,16 @@ const updatedSkillsData: Skill[] = [
   
   // Data Science
   { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'Sigma', color: 'bg-blue-500', iconClasses: 'text-blue-500' },
+  { name: 'Matplotlib', percentage: 60, category: 'Data Science', icon: 'BarChart3', color: 'bg-blue-600', iconClasses: 'text-blue-600' },
+  { name: 'Pandas', percentage: 70, category: 'Data Science', icon: 'Table', color: 'bg-purple-500', iconClasses: 'text-purple-600' },
+  { name: 'Scikit-learn', percentage: 50, category: 'Data Science', icon: 'TrendingUp', color: 'bg-orange-500', iconClasses: 'text-orange-600' },
   
   // Programming Languages
   { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', color: 'bg-blue-500', iconClasses: 'text-yellow-400' },
   { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', color: 'bg-indigo-500', iconClasses: 'text-green-500' },
   { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', color: 'bg-sky-400', iconClasses: 'text-blue-500' },
+  { name: 'Java', percentage: 70, category: 'Programming Languages', icon: 'Coffee', color: 'bg-red-500', iconClasses: 'text-red-600' },
+  { name: 'C++', percentage: 90, category: 'Programming Languages', icon: 'Settings2', color: 'bg-blue-700', iconClasses: 'text-blue-700' },
   
   // Frontend
   { name: 'React', percentage: 60, category: 'Frontend', icon: 'Atom', color: 'bg-purple-500', iconClasses: 'text-sky-500' },
@@ -84,10 +94,10 @@ export default function HomePage() {
               </h1>
               <div className="mt-6 text-lg text-muted-foreground max-w-2xl space-y-4">
                 <p>
-                  I’m an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I’ve built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I'm fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
+                  I'm an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I've built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I'm fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
                 </p>
                 <p>
-                  I’m currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
+                  I'm currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
                 </p>
               </div>
             </div>
