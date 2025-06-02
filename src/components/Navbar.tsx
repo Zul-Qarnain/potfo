@@ -2,7 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation"; // Imported usePathname
+import { useState, useEffect, useRef } from "react"; // Imported useRef
 import { Menu, X, Code2, ChevronDown } from "lucide-react"; // Added ChevronDown
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -33,10 +34,13 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const pathname = usePathname(); // Get the current pathname
+  // Added this to measure the width of the active link for the underline effect
+
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out flex justify-center md:px-8", // Centered the header content and added horizontal padding for desktop
         isScrolled ? "bg-background/80 backdrop-blur-md shadow-md" : "bg-transparent"
       )}
     >
@@ -65,30 +69,31 @@ export function Navbar() {
           </div>
 
           {/* Desktop View: Logo */}
-          <Link href="/" className="hidden md:flex items-center gap-2" aria-label="Persona Homepage">
+          <Link href="/" className="hidden md:flex items-center gap-2 flex-shrink-0 mr-4" aria-label="Persona Homepage">
             <Code2 className="h-8 w-8 text-primary" />
             <span className="text-2xl font-bold font-headline text-foreground">
               Persona
             </span>
           </Link>
 
-          {/* Desktop View: Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                aria-label={`Navigate to ${item.label}`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          
-          {/* Desktop View: Theme Toggle */}
-          <div className="hidden md:flex items-center">
-            <ThemeToggle />
+          {/* Desktop View: Combined Nav and Theme Toggle Container */}
+          <div className="hidden md:flex items-center bg-indigo-500/30 backdrop-blur-lg rounded-full px-8 py-3 space-x-12 mx-auto"> {/* Changed background to violet, added transparency, and used mx-auto to center */}
+            <nav className="flex items-center space-x-8">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href} // Removed extra argument in cn
+                  className={cn( // Wrapped className in cn
+                    "text-foreground text-opacity-80 hover:text-opacity-100 transition-colors font-medium text-base", // Increased text size slightly
+                    pathname === item.href && "text-primary text-opacity-100" // Highlight active link
+                  )}
+                  aria-label={`Navigate to ${item.label}`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+            <ThemeToggle /> {/* Moved ThemeToggle inside the main container */}
           </div>
         </div>
       </div>

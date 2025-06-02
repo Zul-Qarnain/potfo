@@ -118,15 +118,16 @@ export default function HomePage() {
           </div>
 
           <div className="md:col-span-1 flex flex-col items-center space-y-6 animate-fade-in-right mt-8 md:mt-0 order-1 md:order-2">
-            <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72">
-              <Image
-                src="/images/profile-pic.jpg" 
-                alt="Mohammad Shihab Hossain - Profile Picture"
-                width={400}
-                height={400}
-                className="rounded-full object-cover border-4 border-primary shadow-lg"
-              />
-            </div>
+          <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72 rounded-full overflow-hidden border-4 border-primary shadow-lg">
+  <Image
+    src="/handsome.jpeg" // Updated path relative to the public directory
+    alt="Mohammad Shihab Hossain - Profile Picture"
+    layout="fill" // Use layout="fill" when the parent has fixed dimensions
+    objectFit="cover"
+    style={{ objectPosition: 'top' }} // Add objectPosition: 'top' to shift the image upwards
+  />
+</div>
+
             <div className="flex space-x-4">
               {profileLinks.map((link) => {
                 const Icon = iconComponents[link.icon] || HelpCircle;
