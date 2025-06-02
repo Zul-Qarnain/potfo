@@ -1,76 +1,58 @@
-
-"use client";
-
-import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
+import React from 'react';
 import * as LucideIcons from 'lucide-react';
 
-interface SkillBarProps {
-  skillName: string;
-  percentage: number;
-  barColor: string; // Tailwind CSS background color class for the fill
-  iconName: string; // Lucide icon name
-  iconClasses: string; // Tailwind CSS classes for icon color
-}
-
+// Helper function to get Lucide icon component by name
 const getIcon = (iconName: string): React.ElementType => {
   const IconComponent = (LucideIcons as any)[iconName];
   return IconComponent || LucideIcons.HelpCircle; // Fallback icon
 };
 
-export function SkillBar({ skillName, percentage, barColor, iconName, iconClasses }: SkillBarProps) {
-  const [isInView, setIsInView] = useState(false);
-  const [ref, setRef] = useState<HTMLDivElement | null>(null);
+interface SkillBarProps {
+  skillName: string;
+  percentage: number;
+  barColor: string;
+  iconName: string;
+  iconClasses?: string;
+}
 
-  const IconComponent = getIcon(iconName);
-
-  useEffect(() => {
-    if (!ref) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    observer.observe(ref);
-
-    return () => {
-      if (ref) {
-        observer.unobserve(ref);
-      }
-    };
-  }, [ref]);
+export const SkillBar: React.FC<SkillBarProps> = ({
+  skillName,
+  percentage,
+  barColor,
+  iconName,
+  iconClasses = '',
+}) => {
+  const Icon = getIcon(iconName);
 
   return (
-    <div ref={setRef} className="bg-card p-3 rounded-md shadow-sm flex flex-col space-y-2">
-      <div className="flex items-center">
-        <IconComponent className={cn('w-5 h-5 mr-2 shrink-0', iconClasses)} />
-        <span className="text-sm text-foreground">{skillName}</span>
+    <div className="flex items-center space-x-4 p-4 bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-shadow duration-300">
+      {/* Icon */}
+      <div className="flex-shrink-0">
+        <Icon 
+          className={`w-8 h-8 ${iconClasses}`} 
+          style={{ color: barColor }}
+        />
       </div>
-      <div className="w-full bg-muted dark:bg-neutral-700 rounded-full h-2">
-        <div
-          className={cn(
-            "h-2 rounded-full transition-all duration-1000 ease-out",
-            barColor,
-            isInView ? 'skill-bar-fill' : '' // Ensure animation class is applied conditionally
-          )}
-          style={{ width: isInView ? `${percentage}%` : '0%' }}
-          aria-valuenow={percentage}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          role="progressbar"
-          aria-label={`${skillName} progress: ${percentage}%`}
-        ></div>
+      
+      {/* Skill info and progress bar */}
+      <div className="flex-grow">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm font-medium text-foreground">{skillName}</span>
+          <span className="text-sm text-muted-foreground font-medium">{percentage}%</span>
+        </div>
+        
+        {/* Progress bar container */}
+        <div className="w-full bg-muted rounded-full h-2.5 overflow-hidden">
+          {/* Progress bar fill */}
+          <div
+            className="skill-bar-fill h-full rounded-full transition-all duration-1000 ease-out"
+            style={{
+              backgroundColor: barColor,
+              width: `${percentage}%`,
+            }}
+          />
+        </div>
       </div>
     </div>
   );
-}
-
-    
+};

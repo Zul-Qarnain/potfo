@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -17,11 +16,38 @@ interface GroupedSkills {
   [category: string]: Skill[];
 }
 
+// Updated skills data with specific percentages and colors
+const updatedSkillsData: Skill[] = [
+  // Machine Learning
+  { name: 'PyTorch', percentage: 60, category: 'Machine Learning', icon: 'Brain', color: '#ee4c2c', iconClasses: '' },
+  { name: 'Hugging Face', percentage: 50, category: 'Machine Learning', icon: 'Zap', color: '#ffcc02', iconClasses: '' },
+  { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'BarChart3', color: '#013243', iconClasses: '' },
+  
+  // Programming Languages
+  { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Code', color: '#f7df1e', iconClasses: '' },
+  { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'FileCode', color: '#3776ab', iconClasses: '' },
+  { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', color: '#3178c6', iconClasses: '' },
+  
+  // Frontend
+  { name: 'React', percentage: 60, category: 'Frontend', icon: 'Component', color: '#61dafb', iconClasses: '' },
+  { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Globe', color: '#000000', iconClasses: '' },
+  { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Layout', color: '#e34f26', iconClasses: '' },
+  { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Palette', color: '#06b6d4', iconClasses: '' },
+  
+  // Backend
+  { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'Server', color: '#339933', iconClasses: '' },
+  { name: 'Express', percentage: 70, category: 'Backend', icon: 'Layers', color: '#000000', iconClasses: '' },
+  
+  // Database
+  { name: 'MongoDB', percentage: 50, category: 'Database', icon: 'Database', color: '#47a248', iconClasses: '' },
+  { name: 'PostgreSQL', percentage: 70, category: 'Database', icon: 'Table', color: '#336791', iconClasses: '' },
+];
+
 export default function HomePage() {
   const EducationIcon = getIcon(educationData.icon);
   const ExperienceIcon = getIcon(experienceData.icon);
 
-  const groupedSkills = skillsData.reduce<GroupedSkills>((acc, skill) => {
+  const groupedSkills = updatedSkillsData.reduce<GroupedSkills>((acc, skill) => {
     const { category } = skill;
     if (!acc[category]) {
       acc[category] = [];
@@ -30,18 +56,17 @@ export default function HomePage() {
     return acc;
   }, {});
 
-  // Define the desired order of skill categories from the image
-   const skillCategoryOrder: string[] = [
+  // Define the desired order of skill categories
+  const skillCategoryOrder: string[] = [
     'Machine Learning',
     'Data Science',
     'Programming Languages',
     'Frontend',
     'Backend',
-    'Database', // Added Database category
+    'Database',
   ];
   
   const sortedSkillCategories = skillCategoryOrder.filter(category => groupedSkills[category]);
-
 
   return (
     <div className="bg-background text-foreground min-h-screen">
@@ -54,10 +79,10 @@ export default function HomePage() {
               </h1>
               <div className="mt-6 text-lg text-muted-foreground max-w-2xl space-y-4">
                 <p>
-                  I’m an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I’ve built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I&apos;m fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
+                  I'm an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I've built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I&apos;m fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
                 </p>
                 <p>
-                  I’m currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
+                  I'm currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
                 </p>
               </div>
             </div>
@@ -159,5 +184,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    

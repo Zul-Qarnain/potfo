@@ -145,13 +145,22 @@ section {
   font-family: var(--font-source-code-pro), monospace;
 }
 
-/* Skill bar animation */
-@keyframes progress-bar {
-  0% { width: 0%; }
+/* Skill bar animation - CRITICAL FOR ANIMATED PROGRESS BARS */
+@keyframes skill-bar-progress {
+  0% { 
+    width: 0%; 
+    opacity: 0.7;
+  }
+  100% { 
+    width: var(--target-width); 
+    opacity: 1;
+  }
 }
 
 .skill-bar-fill {
-  animation: progress-bar 1.5s ease-out forwards;
+  animation: skill-bar-progress 2s ease-out forwards;
+  animation-delay: 0.5s;
+  width: 0%; /* Start at 0 width */
 }
 
 /* Entry animations */
