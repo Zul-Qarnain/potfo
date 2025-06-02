@@ -5,9 +5,12 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 type Theme = "light" | "dark";
 
 interface ThemeProviderProps {
-  children: ReactNode;
-  defaultTheme?: Theme;
+  children: React.ReactNode;
+  defaultTheme?: string;
   storageKey?: string;
+  attribute?: string;
+  enableSystem?: boolean;
+  disableTransitionOnChange?: boolean;
 }
 
 interface ThemeProviderState {
