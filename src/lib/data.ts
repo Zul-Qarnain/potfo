@@ -155,7 +155,7 @@ export const eventsData: Event[] = [
   {
     id: '5',
     title: 'Presentation on Paper',
-    images: ['/images/events/paper-presentation-event.jpg'], 
+    images: ['/ieom.jpeg'], 
     imageHint: 'paper presentation', 
     date: 'December 21, 2024',
     location: 'American International University - Bangladesh (AIUB)',
@@ -185,7 +185,7 @@ export const eventsData: Event[] = [
   {
     id: '8',
     title: 'Winners of Best IT Project',
-    images: ['https://placehold.co/600x400.png'], 
+    images: ['/govt-science.jpg','/govt-award.jpg'], 
     imageHint: 'AI competition', 
     date: 'May 15, 2022',
     location: 'Govt. Science College, Tejgaon, Dhaka',

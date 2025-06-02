@@ -8,25 +8,25 @@ import { Toaster } from "@/components/ui/toaster"; // For contact form messages
 
 export const metadata: Metadata = {
   title: {
-    default: 'Persona | Mohammad Shihab Hossain - Personal Portfolio',
-    template: '%s | Persona',
+    default: 'Mohammad Shihab Hossain',
+    template: '%s | Mohammad Shihab Hossain',
   },
-  description: 'A modern, visually stunning personal portfolio for Mohammad Shihab Hossain, showcasing skills, projects, publications, and events.',
+  description: 'Personal portfolio for Mohammad Shihab Hossain, showcasing his skills, projects, publications, and events.',
   openGraph: {
-    title: 'Persona | Mohammad Shihab Hossain - Personal Portfolio',
+    title: 'Mohammad Shihab Hossain - Personal Portfolio',
     description: 'Explore the professional journey of Mohammad Shihab Hossain.',
     type: 'website',
     locale: 'en_US',
-    url: 'https://your-domain.com', // Replace with actual domain
+    url: 'https://shihab.vercel.com', // Replace with actual domain
     siteName: 'Persona',
-    // images: [ // Add a default OG image if available
-    //   {
-    //     url: 'https://your-domain.com/og-image.png',
-    //     width: 1200,
-    //     height: 630,
-    //     alt: 'Persona Portfolio',
-    //   },
-    // ],
+     images: [ // Add a default OG image if available
+      {
+        url: 'https://shihab.vercel.com/hadnsomee.jpeg',
+      width: 1200,
+    height: 630,
+     alt: 'Persona Portfolio',
+      },
+    ],
   },
 };
 
@@ -43,6 +43,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
         <ThemeProvider

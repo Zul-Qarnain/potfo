@@ -94,11 +94,10 @@ export default function HomePage() {
               </h1>
               <div className="mt-6 text-lg text-muted-foreground max-w-2xl space-y-4">
                 <p>
-                  I'm an aspiring AI researcher with a strong foundation in deep learning, quantum computing, and full-stack web development. Over the past year, I've built projects with React, gained hands-on experience with PyTorch and large language models (LLMs), and published a paper on AI and LLMs. I'm fluent in 14 programming languages and passionate about solving real-world challenges—like cancer treatment, renewable energy, and human longevity—through the fusion of AI and quantum physics, also known as Quantum AI.
+ I'm an aspiring AI researcher and software developer with a strong foundation in deep learning, quantum computing, full-stack web development, and cybersecurity. Over the past year, I've built various projects using Python and Java, gaining hands-on experience with machine learning, PyTorch, and large language models (LLMs). I also co-authored a research paper exploring the intersection of AI and LLMs.
                 </p>
-                <p>
-                  I'm currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), with a focus on advancing intelligent systems that improve lives. My goal is to contribute to groundbreaking technologies that shape a better future.
-                </p>
+                <p>Currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), I'm focused on advancing intelligent systems that have real-world impact. I'm especially interested in using the synergy between AI and quantum physics—Quantum AI—to address challenges in areas like cancer treatment, renewable energy, and human health.</p>
+                <p>Fluent in 14 programming languages, I'm driven by a passion for building technologies that contribute to a better, smarter futur</p>
               </div>
             </div>
 
