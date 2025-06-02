@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Navbar } from '@/components/Navbar';
@@ -46,7 +47,7 @@ export default function RootLayout({
       <body className="font-body antialiased flex flex-col min-h-screen">
         <ThemeProvider
           attribute="class"
-          defaultTheme="light" /* Set to light to make Tokyo/Monokai mix the default */
+          defaultTheme="dark" /* Set to dark to make Dracula the default */
           enableSystem
           disableTransitionOnChange
         >
