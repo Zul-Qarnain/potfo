@@ -1,12 +1,12 @@
-"use client";
-import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import RichTextEditor from '@/components/RichTextEditor'; // 
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-// Define types directly in this file for now
+// BlogPost interface matching your exact database schema
 interface BlogPost {
-  id?: string;
+  id: string;
   title: string;
   slug: string;
   content: string;
@@ -14,686 +14,247 @@ interface BlogPost {
   meta_description?: string;
   meta_keywords?: string;
   featured_image_url?: string;
-  author_id?: string;
+  author_id: string;
   status: 'draft' | 'published' | 'archived';
-  published_at?: string | null;
-  created_at?: string;
-  updated_at?: string;
-  views_count?: number;
-  reading_time?: number;
-  featured?: boolean;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+  views_count: number;
+  reading_time: number;
+  featured: boolean;
   tags: string[];
 }
 
-export default function PostPage() {
-  const params = useParams();
-  const router = useRouter();
-  const supabase = createClientComponentClient();
-  const postId = params.id as string;
-
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [saving, setSaving] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-
-  // Load post data
-  useEffect(() => {
-    if (postId) {
-      loadPost();
-    }
-  }, [postId]);
-
-  const loadPost = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .eq('id', postId)
-        .single();
-
-      if (error) {
-        throw error;
-      }
-
-      if (data) {
-        setPost(data);
-      } else {
-        setError('Post not found');
-      }
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load post';
-      setError(errorMessage);
-      console.error('Error loading post:', err);
-    } finally {
-      setLoading(false);
-    }
+interface PostProps {
+  params: {
+    slug: string;
   };
+}
 
-  const handleTitleChange = (title: string): void => {
-    if (post) {
-      setPost({
-        ...post,
-        title,
-        slug: generateSlug(title),
-      });
-    }
-  };
+const PostPage = async ({ params }: PostProps) => {
+  const supabase = createServerComponentClient({ cookies });
 
-  const generateSlug = (title: string): string => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-  };
+  // Fetch the post from Supabase
+  const { data: post, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('slug', params.slug)
+    .eq('status', 'published')
+    .single();
 
-  const calculateReadingTime = (content: string): number => {
-    const wordsPerMinute = 200;
-    const words = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
-    return Math.ceil(words / wordsPerMinute);
-  };
-
-  const handleTagsChange = (tagsString: string): void => {
-    if (post) {
-      const tagsArray: string[] = tagsString
-        .split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0);
-      
-      setPost({
-        ...post,
-        tags: tagsArray
-      });
-    }
-  };
-
-  const savePost = async (status?: 'draft' | 'published'): Promise<void> => {
-    if (!post) return;
-
-    setSaving(true);
-    setError('');
-    
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        throw new Error('User not authenticated');
-      }
-
-      const updateData = {
-        ...post,
-        status: status || post.status,
-        reading_time: calculateReadingTime(post.content),
-        updated_at: new Date().toISOString(),
-        published_at: (status === 'published' && post.status !== 'published') 
-          ? new Date().toISOString() 
-          : post.published_at,
-      };
-
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .update(updateData)
-        .eq('id', postId)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      // Update local state
-      setPost(data);
-      setIsEditing(false);
-
-      // Trigger sitemap regeneration if published
-      if (status === 'published') {
-        try {
-          await fetch('/api/sitemap/regenerate', { method: 'POST' });
-          await fetch('/api/seo/ping-google', { method: 'POST' });
-        } catch (seoError) {
-          console.warn('SEO operations failed:', seoError);
-        }
-      }
-
-      // Show success message
-      alert('Post saved successfully!');
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
-      setError(errorMessage);
-      console.error('Error saving post:', err);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const deletePost = async (): Promise<void> => {
-    if (!post || !confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
-      return;
-    }
-
-    setSaving(true);
-    try {
-      const { error } = await supabase
-        .from('blog_posts')
-        .delete()
-        .eq('id', postId);
-
-      if (error) throw error;
-
-      router.push('/adminpacha/dashboard');
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to delete post';
-      setError(errorMessage);
-      console.error('Error deleting post:', err);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading post...</p>
-        <style jsx>{`
-          .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 400px;
-            color: #6272a4;
-          }
-          .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #44475a;
-            border-top: 4px solid #bd93f9;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-          }
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
-      </div>
-    );
+  if (error || !post) {
+    notFound();
   }
 
-  if (error && !post) {
-    return (
-      <div className="error-container">
-        <h1>❌ Error</h1>
-        <p>{error}</p>
-        <button 
-          onClick={() => router.push('/adminpacha/dashboard')}
-          className="back-btn"
-        >
-          🔙 Back to Dashboard
-        </button>
-        <style jsx>{`
-          .error-container {
-            text-align: center;
-            padding: 2rem;
-            color: #ff5555;
-          }
-          .back-btn {
-            background: #6272a4;
-            color: #f8f8f2;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 1rem;
-            font-family: inherit;
-          }
-          .back-btn:hover {
-            background: #44475a;
-          }
-        `}</style>
-      </div>
-    );
+  // Increment view count using your database function
+  try {
+    await supabase.rpc('increment_post_views', { post_slug: params.slug });
+  } catch (error) {
+    console.error('Error incrementing view count:', error);
   }
 
-  if (!post) return null;
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const formatTags = (tags: string[]) => {
+    if (!tags || tags.length === 0) return 'Technology, Programming';
+    return tags.join(', ');
+  };
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-site.com';
+  const postUrl = `${siteUrl}/posts/${post.slug}`;
 
   return (
-    <div className="post-page">
-      <div className="post-header">
-        <div className="post-title-section">
-          <h1>{isEditing ? '✏️ Edit Post' : '📄 View Post'}</h1>
-          <div className="post-status">
-            <span className={`status-badge ${post.status}`}>
-              {post.status === 'draft' ? '📝' : post.status === 'published' ? '🌟' : '📦'} {post.status.toUpperCase()}
+    <div className="flex flex-col items-center py-8 px-4">
+      <div className="w-full max-w-4xl">
+        {/* Back arrow and category section */}
+        <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <Link href="/posts" className="hover:underline hover:text-purple-600 transition-colors duration-200">
+            ← Back to Posts
+          </Link>
+          <span className="mx-2">|</span>
+          <span>{formatTags(post.tags)}</span>
+        </div>
+
+        {/* Featured badge */}
+        {post.featured && (
+          <div className="text-center mb-4">
+            <span className="inline-block bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+              ⭐ Featured Post
             </span>
           </div>
-        </div>
-        
-        <div className="post-actions">
-          {!isEditing ? (
-            <>
-              <button 
-                onClick={() => setIsEditing(true)}
-                className="edit-btn"
-                disabled={saving}
-              >
-                ✏️ Edit
-              </button>
-              {post.status === 'published' && (
-                <button 
-                  onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
-                  className="view-btn"
-                >
-                  👁️ View Live
-                </button>
-              )}
-              <button 
-                onClick={() => savePost(post.status === 'published' ? 'draft' : 'published')}
-                className={post.status === 'published' ? 'unpublish-btn' : 'publish-btn'}
-                disabled={saving}
-              >
-                {post.status === 'published' ? '📦 Unpublish' : '🚀 Publish'}
-              </button>
-              <button 
-                onClick={deletePost}
-                className="delete-btn"
-                disabled={saving}
-              >
-                🗑️ Delete
-              </button>
-            </>
-          ) : (
-            <>
-              <button 
-                onClick={() => savePost()}
-                disabled={saving || !post.title.trim()}
-                className="save-btn"
-              >
-                💾 Save Changes
-              </button>
-              <button 
-                onClick={() => {
-                  setIsEditing(false);
-                  loadPost(); // Reload original data
-                }}
-                className="cancel-btn"
-                disabled={saving}
-              >
-                ❌ Cancel
-              </button>
-            </>
-          )}
-        </div>
-      </div>
+        )}
 
-      {error && (
-        <div className="error-banner">
-          <span className="error-icon">⚠️</span>
-          {error}
-        </div>
-      )}
-
-      <div className="post-content">
-        {!isEditing ? (
-          <div className="view-mode">
-            <div className="post-meta">
-              <p><strong>📅 Created:</strong> {new Date(post.created_at || '').toLocaleDateString()}</p>
-              {post.updated_at && (
-                <p><strong>📝 Updated:</strong> {new Date(post.updated_at).toLocaleDateString()}</p>
-              )}
-              {post.published_at && (
-                <p><strong>🌟 Published:</strong> {new Date(post.published_at).toLocaleDateString()}</p>
-              )}
-              <p><strong>📖 Reading Time:</strong> {post.reading_time || 0} min</p>
-              <p><strong>👀 Views:</strong> {post.views_count || 0}</p>
-            </div>
-
-            <div className="post-details">
-              <div className="detail-section">
-                <h3>Title</h3>
-                <p>{post.title}</p>
-              </div>
-
-              <div className="detail-section">
-                <h3>Slug</h3>
-                <p>/blog/{post.slug}</p>
-              </div>
-
-              <div className="detail-section">
-                <h3>Content</h3>
-                <div 
-                  className="content-preview"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
-                />
-              </div>
-
-              {post.tags && post.tags.length > 0 && (
-                <div className="detail-section">
-                  <h3>Tags</h3>
-                  <div className="tags-display">
-                    {post.tags.map((tag, index) => (
-                      <span key={index} className="tag">{tag}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {post.meta_description && (
-                <div className="detail-section">
-                  <h3>Meta Description</h3>
-                  <p>{post.meta_description}</p>
-                </div>
-              )}
-            </div>
+        {/* Post Title and Date */}
+        <div className="text-center mb-8">
+          <p className="text-base text-gray-500 dark:text-gray-400 mb-2">
+            {formatDate(post.published_at!)}
+          </p>
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4 text-gray-900 dark:text-gray-100">
+            {post.title}
+          </h1>
+          <div className="flex items-center justify-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+            {post.reading_time > 0 && <span>{post.reading_time} min read</span>}
+            {post.views_count > 0 && <span>• {post.views_count + 1} views</span>}
+            <span>• Published {formatDate(post.created_at)}</span>
           </div>
-        ) : (
-          <div className="edit-mode">
-            <div className="form-section">
-              <label className="form-label">Post Title</label>
-              <input
-                type="text"
-                value={post.title}
-                onChange={(e) => handleTitleChange(e.target.value)}
-                className="title-input"
-                disabled={saving}
-              />
-            </div>
+        </div>
 
-            <div className="form-section">
-              <label className="form-label">URL Slug</label>
-              <input
-                type="text"
-                value={post.slug}
-                onChange={(e) => setPost({ ...post, slug: e.target.value })}
-                className="slug-input"
-                disabled={saving}
-              />
-            </div>
-
-            <div className="form-section">
-              <label className="form-label">Content</label>
-              <RichTextEditor
-                content={post.content}
-                onChange={(content: string) => setPost({ ...post, content })}
-                placeholder="Start writing your blog post..."
-              />
-            </div>
-
-            <div className="form-section">
-              <label className="form-label">Meta Description</label>
-              <textarea
-                value={post.meta_description || ''}
-                onChange={(e) => setPost({ ...post, meta_description: e.target.value })}
-                className="meta-textarea"
-                maxLength={160}
-                disabled={saving}
-              />
-            </div>
-
-            <div className="form-section">
-              <label className="form-label">Tags (comma-separated)</label>
-              <input
-                type="text"
-                value={post.tags ? post.tags.join(', ') : ''}
-                onChange={(e) => handleTagsChange(e.target.value)}
-                className="tags-input"
-                disabled={saving}
-              />
-            </div>
+        {/* Featured Image */}
+        {post.featured_image_url && (
+          <div className="relative w-full aspect-video overflow-hidden rounded-lg mb-8 shadow-lg">
+            <Image
+              src={post.featured_image_url}
+              alt={post.title}
+              fill
+              style={{ objectFit: 'cover' }}
+              className="object-cover"
+            />
           </div>
         )}
+
+        {/* Post excerpt if available */}
+        {post.excerpt && (
+          <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mb-8 border-l-4 border-purple-600">
+            <p className="text-lg italic text-gray-700 dark:text-gray-300 leading-relaxed">
+              {post.excerpt}
+            </p>
+          </div>
+        )}
+
+        {/* Post Content */}
+        <div className="prose prose-lg dark:prose-invert max-w-none text-gray-800 dark:text-gray-200 leading-relaxed">
+          <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+        </div>
+
+        {/* Tags Section */}
+        {post.tags && post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <span className="text-sm font-semibold text-gray-600 dark:text-gray-400 mr-2">Tags:</span>
+            {post.tags.map((tag: string, index: number) => (
+              <span
+                key={index}
+                className="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-sm px-3 py-1 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors cursor-pointer"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Social Sharing Buttons */}
+        <div className="flex justify-center space-x-4 my-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+          <span className="text-sm font-semibold text-gray-600 dark:text-gray-400 mr-4 self-center">Share:</span>
+          <a 
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(postUrl)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-200"
+            title="Share on Twitter"
+          >
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+            </svg>
+          </a>
+          <a 
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500 hover:text-blue-700 dark:text-gray-400 dark:hover:text-blue-500 transition-colors duration-200"
+            title="Share on LinkedIn"
+          >
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+            </svg>
+          </a>
+          <a 
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500 hover:text-blue-800 dark:text-gray-400 dark:hover:text-blue-600 transition-colors duration-200"
+            title="Share on Facebook"
+          >
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path>
+            </svg>
+          </a>
+        </div>
+
+        {/* About the Author section */}
+        <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6 mt-12 p-6 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-inner">
+          <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-300 dark:bg-gray-600 flex-shrink-0">
+            <Image
+              src="/panjabi.jpeg"
+              alt="Author Avatar"
+              width={96}
+              height={96}
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">About the Author</h3>
+            <p className="text-base text-gray-700 dark:text-gray-300">
+              Md. Mobin Chowdhury is an undergraduate Physics student at University of Dhaka, combining theoretical physics research with self-taught expertise in AI and quantum computing.
+            </p>
+          </div>
+        </div>
+
+        {/* Navigation to other posts */}
+        <div className="mt-12 text-center">
+          <Link 
+            href="/posts" 
+            className="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 hover:shadow-md"
+          >
+            ← Back to All Posts
+          </Link>
+        </div>
       </div>
-
-      <style jsx>{`
-        .post-page {
-          max-width: 1000px;
-          margin: 0 auto;
-          padding: 1rem;
-        }
-
-        .post-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 2rem;
-          padding-bottom: 1rem;
-          border-bottom: 2px solid #44475a;
-        }
-
-        .post-title-section {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-
-        .post-title-section h1 {
-          margin: 0;
-          color: #bd93f9;
-          font-size: 2rem;
-        }
-
-        .status-badge {
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          font-size: 0.8rem;
-          font-weight: 600;
-        }
-
-        .status-badge.draft {
-          background: #6272a4;
-          color: #f8f8f2;
-        }
-
-        .status-badge.published {
-          background: #50fa7b;
-          color: #282a36;
-        }
-
-        .status-badge.archived {
-          background: #ffb86c;
-          color: #282a36;
-        }
-
-        .post-actions {
-          display: flex;
-          gap: 0.5rem;
-          flex-wrap: wrap;
-        }
-
-        .edit-btn, .view-btn, .publish-btn, .unpublish-btn, .delete-btn, .save-btn, .cancel-btn {
-          padding: 0.5rem 1rem;
-          border: none;
-          border-radius: 6px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          font-family: inherit;
-          font-size: 0.9rem;
-        }
-
-        .edit-btn {
-          background: #8be9fd;
-          color: #282a36;
-        }
-
-        .view-btn {
-          background: #50fa7b;
-          color: #282a36;
-        }
-
-        .publish-btn {
-          background: #50fa7b;
-          color: #282a36;
-        }
-
-        .unpublish-btn {
-          background: #ffb86c;
-          color: #282a36;
-        }
-
-        .delete-btn {
-          background: #ff5555;
-          color: #f8f8f2;
-        }
-
-        .save-btn {
-          background: #50fa7b;
-          color: #282a36;
-        }
-
-        .cancel-btn {
-          background: #6272a4;
-          color: #f8f8f2;
-        }
-
-        .edit-btn:hover, .view-btn:hover, .publish-btn:hover, .save-btn:hover {
-          transform: translateY(-1px);
-        }
-
-        .delete-btn:hover {
-          background: #ff4444;
-        }
-
-        .cancel-btn:hover, .unpublish-btn:hover {
-          opacity: 0.8;
-        }
-
-        .edit-btn:disabled, .view-btn:disabled, .publish-btn:disabled, .unpublish-btn:disabled, .delete-btn:disabled, .save-btn:disabled, .cancel-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-          transform: none;
-        }
-
-        .error-banner {
-          background: linear-gradient(135deg, rgba(255, 85, 85, 0.2) 0%, rgba(255, 85, 85, 0.1) 100%);
-          color: #ff5555;
-          padding: 1rem;
-          border-radius: 8px;
-          margin-bottom: 2rem;
-          border: 1px solid rgba(255, 85, 85, 0.3);
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        .post-meta {
-          background: rgba(189, 147, 249, 0.1);
-          padding: 1rem;
-          border-radius: 8px;
-          margin-bottom: 2rem;
-          border: 1px solid rgba(189, 147, 249, 0.3);
-        }
-
-        .post-meta p {
-          margin: 0.5rem 0;
-          color: #f8f8f2;
-        }
-
-        .detail-section {
-          margin-bottom: 2rem;
-        }
-
-        .detail-section h3 {
-          color: #bd93f9;
-          margin-bottom: 0.5rem;
-          font-size: 1.2rem;
-        }
-
-        .detail-section p {
-          color: #f8f8f2;
-          line-height: 1.6;
-        }
-
-        .content-preview {
-          background: #1e1f29;
-          padding: 1.5rem;
-          border-radius: 8px;
-          border: 1px solid #44475a;
-          color: #f8f8f2;
-          line-height: 1.6;
-        }
-
-        .tags-display {
-          display: flex;
-          gap: 0.5rem;
-          flex-wrap: wrap;
-        }
-
-        .tag {
-          background: #44475a;
-          color: #f8f8f2;
-          padding: 0.25rem 0.75rem;
-          border-radius: 15px;
-          font-size: 0.8rem;
-        }
-
-        .form-section {
-          margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-          display: block;
-          color: #bd93f9;
-          margin-bottom: 0.5rem;
-          font-weight: 600;
-        }
-
-        .title-input, .slug-input, .tags-input {
-          width: 100%;
-          padding: 0.75rem;
-          background: #1e1f29;
-          border: 2px solid #44475a;
-          border-radius: 6px;
-          color: #f8f8f2;
-          font-family: inherit;
-          box-sizing: border-box;
-        }
-
-        .title-input {
-          font-size: 1.2rem;
-          font-weight: 600;
-        }
-
-        .meta-textarea {
-          width: 100%;
-          min-height: 80px;
-          padding: 0.75rem;
-          background: #1e1f29;
-          border: 2px solid #44475a;
-          border-radius: 6px;
-          color: #f8f8f2;
-          font-family: inherit;
-          resize: vertical;
-          box-sizing: border-box;
-        }
-
-        .title-input:focus, .slug-input:focus, .tags-input:focus, .meta-textarea:focus {
-          outline: none;
-          border-color: #bd93f9;
-          box-shadow: 0 0 0 3px rgba(189, 147, 249, 0.2);
-        }
-
-        @media (max-width: 768px) {
-          .post-header {
-            flex-direction: column;
-            gap: 1rem;
-            align-items: stretch;
-          }
-
-          .post-title-section {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
-          }
-
-          .post-actions {
-            justify-content: center;
-          }
-        }
-      `}</style>
     </div>
   );
+};
+
+export default PostPage;
+
+// Generate metadata for SEO
+export async function generateMetadata({ params }: PostProps) {
+  const supabase = createServerComponentClient({ cookies });
+  
+  const { data: post } = await supabase
+    .from('blog_posts')
+    .select('title, meta_description, featured_image_url, excerpt, tags')
+    .eq('slug', params.slug)
+    .eq('status', 'published')
+    .single();
+
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+    };
+  }
+
+  const description = post.meta_description || post.excerpt || post.title;
+
+  return {
+    title: post.title,
+    description: description,
+    keywords: post.tags?.join(', '),
+    openGraph: {
+      title: post.title,
+      description: description,
+      images: post.featured_image_url ? [post.featured_image_url] : [],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: description,
+      images: post.featured_image_url ? [post.featured_image_url] : [],
+    },
+  };
 }

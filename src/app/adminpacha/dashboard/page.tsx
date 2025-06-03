@@ -28,6 +28,7 @@ const AdminDashboard: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [draftPosts, setDraftPosts] = useState<BlogPost[]>([]);
+  const [publishedPosts, setPublishedPosts] = useState<BlogPost[]>([]);
   const [stats, setStats] = useState({
     totalPosts: 0,
     publishedPosts: 0,
@@ -35,6 +36,7 @@ const AdminDashboard: React.FC = () => {
     totalViews: 0
   });
   const [loadingDrafts, setLoadingDrafts] = useState(false);
+  const [loadingPublished, setLoadingPublished] = useState(false);
   const router = useRouter();
   const supabase = createClientComponentClient();
 
@@ -95,6 +97,25 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const loadPublishedPosts = async () => {
+    try {
+      setLoadingPublished(true);
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      setPublishedPosts(data || []);
+    } catch (error) {
+      console.error("Error loading published posts:", error);
+    } finally {
+      setLoadingPublished(false);
+    }
+  };
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -106,7 +127,7 @@ const AdminDashboard: React.FC = () => {
         }
 
         setUser(user);
-        await Promise.all([loadStats(), loadDraftPosts()]);
+        await Promise.all([loadStats(), loadDraftPosts(), loadPublishedPosts()]);
       } catch (error) {
         console.error("Error fetching user:", error);
         router.push("/adminpacha");
@@ -160,14 +181,40 @@ const AdminDashboard: React.FC = () => {
 
       if (error) throw error;
 
-      // ✅ Fixed: call the function that loads the drafts
-      await Promise.all([loadStats(), loadDraftPosts()]);
+      // Reload all data
+      await Promise.all([loadStats(), loadDraftPosts(), loadPublishedPosts()]);
       
       // Show success message
       alert('Post published successfully! 🚀');
     } catch (error) {
       console.error('Error publishing post:', error);
       alert('Failed to publish post. Please try again.');
+    }
+  };
+
+  const unpublishPost = async (postId: string, title: string) => {
+    if (!confirm(`Are you sure you want to unpublish "${title}"? It will be moved to drafts.`)) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .update({ 
+          status: 'draft',
+          published_at: null 
+        })
+        .eq('id', postId);
+
+      if (error) throw error;
+
+      // Reload all data
+      await Promise.all([loadStats(), loadDraftPosts(), loadPublishedPosts()]);
+      
+      alert('Post unpublished successfully.');
+    } catch (error) {
+      console.error('Error unpublishing post:', error);
+      alert('Failed to unpublish post. Please try again.');
     }
   };
 
@@ -184,13 +231,44 @@ const AdminDashboard: React.FC = () => {
 
       if (error) throw error;
 
-      // ✅ Fixed: call the function that loads the drafts
-      await Promise.all([loadStats(), loadDraftPosts()]);
+      // Reload all data
+      await Promise.all([loadStats(), loadDraftPosts(), loadPublishedPosts()]);
       
       alert('Draft deleted successfully.');
     } catch (error) {
       console.error('Error deleting draft:', error);
       alert('Failed to delete draft. Please try again.');
+    }
+  };
+
+  const deletePublishedPost = async (postId: string, title: string) => {
+    if (!confirm(`Are you sure you want to delete the published post "${title}"? This action cannot be undone and will remove it from your website.`)) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', postId);
+
+      if (error) throw error;
+
+      // Reload all data
+      await Promise.all([loadStats(), loadDraftPosts(), loadPublishedPosts()]);
+      
+      // Trigger sitemap regeneration since a published post was deleted
+      try {
+        await fetch('/api/sitemap/regenerate', { method: 'POST' });
+        await fetch('/api/seo/ping-google', { method: 'POST' });
+      } catch (seoError) {
+        console.warn('SEO operations failed:', seoError);
+      }
+      
+      alert('Published post deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting published post:', error);
+      alert('Failed to delete published post. Please try again.');
     }
   };
 
@@ -285,6 +363,110 @@ const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Published Posts Section */}
+      <div className="published-section">
+        <div className="section-header">
+          <h2>🌟 Your Published Posts</h2>
+          <button 
+            onClick={() => router.push('/adminpacha/dashboard/posts?filter=published')}
+            className="view-all-btn-header"
+          >
+            📚 View All Published
+          </button>
+        </div>
+
+        {loadingPublished ? (
+          <div className="posts-loading">
+            <div className="loading-spinner-small"></div>
+            <p>Loading published posts...</p>
+          </div>
+        ) : publishedPosts.length === 0 ? (
+          <div className="no-posts">
+            <div className="no-posts-icon">🌟</div>
+            <h3>No published posts yet</h3>
+            <p>Publish your first post to see it here!</p>
+          </div>
+        ) : (
+          <div className="posts-grid">
+            {publishedPosts.map((post) => (
+              <div key={post.id} className="post-card published">
+                <div className="post-header">
+                  <h3 className="post-title">{post.title || 'Untitled Post'}</h3>
+                  <div className="post-status">
+                    <span className="post-date">{formatDate(post.published_at || post.created_at)}</span>
+                    <span className="status-badge published">🌟 Published</span>
+                  </div>
+                </div>
+                
+                <div className="post-content">
+                  <p className="post-preview">
+                    {post.content ? getContentPreview(post.content) : 'No content...'}
+                  </p>
+                  
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="post-tags">
+                      {post.tags.slice(0, 3).map((tag, index) => (
+                        <span key={index} className="tag">#{tag}</span>
+                      ))}
+                      {post.tags.length > 3 && (
+                        <span className="tag-more">+{post.tags.length - 3}</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+                
+                <div className="post-meta">
+                  <span className="reading-time">
+                    ⏱️ {post.reading_time || 0} min read
+                  </span>
+                  <span className="views-count">
+                    👁️ {post.views_count || 0} views
+                  </span>
+                </div>
+                
+                <div className="post-actions">
+                  <button 
+                    onClick={() => router.push(`/adminpacha/dashboard/posts/${post.id}`)}
+                    className="action-btn edit"
+                  >
+                    ✏️ Edit
+                  </button>
+                            <button 
+                onClick={() => window.open(`/posts/${post.slug}`, '_blank')}
+                    className="action-btn view"
+                        >
+            👁️ View
+          </button>
+                  <button 
+                    onClick={() => unpublishPost(post.id, post.title)}
+                    className="action-btn unpublish"
+                  >
+                    📦 Unpublish
+                  </button>
+                  <button 
+                    onClick={() => deletePublishedPost(post.id, post.title)}
+                    className="action-btn delete"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {publishedPosts.length > 0 && (
+          <div className="view-all-published">
+            <button 
+              onClick={() => router.push('/adminpacha/dashboard/posts?filter=published')}
+              className="view-all-btn"
+            >
+              📚 View All Published Posts ({stats.publishedPosts})
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Draft Posts Section */}
       <div className="drafts-section">
         <div className="section-header">
@@ -298,13 +480,13 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         {loadingDrafts ? (
-          <div className="drafts-loading">
+          <div className="posts-loading">
             <div className="loading-spinner-small"></div>
             <p>Loading drafts...</p>
           </div>
         ) : draftPosts.length === 0 ? (
-          <div className="no-drafts">
-            <div className="no-drafts-icon">📝</div>
+          <div className="no-posts">
+            <div className="no-posts-icon">📝</div>
             <h3>No draft posts yet</h3>
             <p>Start writing your next masterpiece!</p>
             <button 
@@ -315,21 +497,24 @@ const AdminDashboard: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="drafts-grid">
+          <div className="posts-grid">
             {draftPosts.map((post) => (
-              <div key={post.id} className="draft-card">
-                <div className="draft-header">
-                  <h3 className="draft-title">{post.title || 'Untitled Post'}</h3>
-                  <span className="draft-date">{formatDate(post.updated_at)}</span>
+              <div key={post.id} className="post-card draft">
+                <div className="post-header">
+                  <h3 className="post-title">{post.title || 'Untitled Post'}</h3>
+                  <div className="post-status">
+                    <span className="post-date">{formatDate(post.updated_at)}</span>
+                    <span className="status-badge draft">📝 Draft</span>
+                  </div>
                 </div>
                 
-                <div className="draft-content">
-                  <p className="draft-preview">
+                <div className="post-content">
+                  <p className="post-preview">
                     {post.content ? getContentPreview(post.content) : 'No content yet...'}
                   </p>
                   
                   {post.tags && post.tags.length > 0 && (
-                    <div className="draft-tags">
+                    <div className="post-tags">
                       {post.tags.slice(0, 3).map((tag, index) => (
                         <span key={index} className="tag">#{tag}</span>
                       ))}
@@ -340,7 +525,7 @@ const AdminDashboard: React.FC = () => {
                   )}
                 </div>
                 
-                <div className="draft-meta">
+                <div className="post-meta">
                   <span className="reading-time">
                     ⏱️ {post.reading_time || 0} min read
                   </span>
@@ -349,7 +534,7 @@ const AdminDashboard: React.FC = () => {
                   </span>
                 </div>
                 
-                <div className="draft-actions">
+                <div className="post-actions">
                   <button 
                     onClick={() => router.push(`/adminpacha/dashboard/posts/${post.id}`)}
                     className="action-btn edit"
@@ -437,7 +622,7 @@ const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* All your existing styles remain the same... */}
+      {/* Enhanced styles with new published posts section */}
       <style jsx>{`
         .dashboard-page {
           padding: 2rem;
@@ -488,7 +673,7 @@ const AdminDashboard: React.FC = () => {
           font-size: 0.9rem;
         }
 
-        .stats-section, .actions-section, .drafts-section {
+        .stats-section, .actions-section, .drafts-section, .published-section {
           margin-bottom: 3rem;
         }
 
@@ -505,6 +690,12 @@ const AdminDashboard: React.FC = () => {
           margin-bottom: 1.5rem;
         }
 
+        .published-section h2 {
+          color: #50fa7b;
+          font-size: 1.8rem;
+          margin-bottom: 1.5rem;
+        }
+
         .section-header {
           display: flex;
           justify-content: space-between;
@@ -512,7 +703,7 @@ const AdminDashboard: React.FC = () => {
           margin-bottom: 1.5rem;
         }
 
-        .new-post-btn {
+        .new-post-btn, .view-all-btn-header {
           background: linear-gradient(135deg, #50fa7b 0%, #8be9fd 100%);
           color: #282a36;
           border: none;
@@ -524,7 +715,7 @@ const AdminDashboard: React.FC = () => {
           font-family: inherit;
         }
 
-        .new-post-btn:hover {
+        .new-post-btn:hover, .view-all-btn-header:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(80, 250, 123, 0.3);
         }
@@ -572,7 +763,7 @@ const AdminDashboard: React.FC = () => {
           font-size: 0.9rem;
         }
 
-        .drafts-loading {
+        .posts-loading {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -590,7 +781,7 @@ const AdminDashboard: React.FC = () => {
           animation: spin 1s linear infinite;
         }
 
-        .no-drafts {
+        .no-posts {
           text-align: center;
           padding: 3rem;
           background: linear-gradient(135deg, rgba(255, 184, 108, 0.1) 0%, rgba(255, 184, 108, 0.05) 100%);
@@ -598,17 +789,17 @@ const AdminDashboard: React.FC = () => {
           border-radius: 12px;
         }
 
-        .no-drafts-icon {
+        .no-posts-icon {
           font-size: 4rem;
           margin-bottom: 1rem;
         }
 
-        .no-drafts h3 {
+        .no-posts h3 {
           color: #ffb86c;
           margin-bottom: 0.5rem;
         }
 
-        .no-drafts p {
+        .no-posts p {
           color: #6272a4;
           margin-bottom: 2rem;
         }
@@ -630,13 +821,13 @@ const AdminDashboard: React.FC = () => {
           box-shadow: 0 4px 12px rgba(255, 184, 108, 0.3);
         }
 
-        .drafts-grid {
+        .posts-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
           gap: 1.5rem;
         }
 
-        .draft-card {
+        .post-card {
           background: linear-gradient(135deg, #1e1f29 0%, #282a36 100%);
           border: 2px solid #44475a;
           border-radius: 12px;
@@ -644,20 +835,26 @@ const AdminDashboard: React.FC = () => {
           transition: all 0.3s ease;
         }
 
-        .draft-card:hover {
+        .post-card.draft:hover {
           transform: translateY(-3px);
           border-color: #ffb86c;
           box-shadow: 0 8px 20px rgba(255, 184, 108, 0.2);
         }
 
-        .draft-header {
+        .post-card.published:hover {
+          transform: translateY(-3px);
+          border-color: #50fa7b;
+          box-shadow: 0 8px 20px rgba(80, 250, 123, 0.2);
+        }
+
+        .post-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
         }
 
-        .draft-title {
+        .post-title {
           color: #f8f8f2;
           font-size: 1.2rem;
           font-weight: 600;
@@ -667,24 +864,51 @@ const AdminDashboard: React.FC = () => {
           line-height: 1.3;
         }
 
-        .draft-date {
+        .post-status {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 0.25rem;
+        }
+
+        .post-date {
           color: #6272a4;
           font-size: 0.8rem;
           flex-shrink: 0;
         }
 
-        .draft-content {
+        .status-badge {
+          padding: 0.25rem 0.5rem;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 500;
+          border: 1px solid;
+        }
+
+        .status-badge.draft {
+          background: rgba(255, 184, 108, 0.2);
+          color: #ffb86c;
+          border-color: rgba(255, 184, 108, 0.3);
+        }
+
+        .status-badge.published {
+          background: rgba(80, 250, 123, 0.2);
+          color: #50fa7b;
+          border-color: rgba(80, 250, 123, 0.3);
+        }
+
+        .post-content {
           margin-bottom: 1rem;
         }
 
-        .draft-preview {
+        .post-preview {
           color: #f8f8f2;
           line-height: 1.5;
           margin-bottom: 1rem;
           font-size: 0.9rem;
         }
 
-        .draft-tags {
+        .post-tags {
           display: flex;
           gap: 0.5rem;
           flex-wrap: wrap;
@@ -709,7 +933,7 @@ const AdminDashboard: React.FC = () => {
           border: 1px solid rgba(98, 114, 164, 0.3);
         }
 
-        .draft-meta {
+        .post-meta {
           display: flex;
           gap: 1rem;
           margin-bottom: 1rem;
@@ -717,7 +941,7 @@ const AdminDashboard: React.FC = () => {
           color: #6272a4;
         }
 
-        .draft-actions {
+        .post-actions {
           display: flex;
           gap: 0.5rem;
           flex-wrap: wrap;
@@ -739,8 +963,18 @@ const AdminDashboard: React.FC = () => {
           color: #282a36;
         }
 
+        .action-btn.view {
+          background: #50fa7b;
+          color: #282a36;
+        }
+
         .action-btn.publish {
           background: #50fa7b;
+          color: #282a36;
+        }
+
+        .action-btn.unpublish {
+          background: #ffb86c;
           color: #282a36;
         }
 
@@ -759,7 +993,7 @@ const AdminDashboard: React.FC = () => {
           transform: none;
         }
 
-        .view-all-drafts {
+        .view-all-drafts, .view-all-published {
           text-align: center;
           margin-top: 2rem;
         }
@@ -851,16 +1085,20 @@ const AdminDashboard: React.FC = () => {
             align-items: stretch;
           }
 
-          .stats-grid, .actions-grid, .drafts-grid {
+          .stats-grid, .actions-grid, .posts-grid {
             grid-template-columns: 1fr;
           }
 
-          .draft-header {
+          .post-header {
             flex-direction: column;
             gap: 0.5rem;
           }
 
-          .draft-actions {
+          .post-status {
+            align-items: flex-start;
+          }
+
+          .post-actions {
             justify-content: center;
           }
         }

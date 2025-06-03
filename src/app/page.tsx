@@ -2,11 +2,11 @@
 
 import Image from 'next/image';
 import React from 'react';
-export const dynamic = 'force-static';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { SkillBar } from '@/components/home/SkillBar';
 import { skillsData, profileLinks, educationData, experienceData, resumeUrl } from '@/lib/data';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import type { Skill } from '@/lib/data';
 import {
   Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle,
@@ -26,15 +26,23 @@ const iconComponents: { [key: string]: React.ElementType } = {
   Settings2: Settings2, HelpCircle: HelpCircle, Bot: Bot, 
   GalleryHorizontalEnd: GalleryHorizontalEnd, Gamepad2: Gamepad2, MessageSquare: MessageSquare,
   Coffee: Coffee, Activity: Activity, PieChart: PieChart,
- Table, BarChart3, TrendingUp,
+  Table, BarChart3, TrendingUp,
   FlaskConical: FlaskConical, Linkedin: Linkedin, School: School, Briefcase: Briefcase,
 };
 
-interface Post {
+// BlogPost interface matching your database schema
+interface BlogPost {
+  id: string;
   title: string;
-  description: string; icon: string; slug: string;
-};
- 
+  slug: string;
+  excerpt?: string;
+  meta_description?: string;
+  published_at: string;
+  reading_time: number;
+  views_count: number;
+  tags: string[];
+}
+
 // Updated skills data with specific percentages and colors
 const updatedSkillsData: Skill[] = [  
   // Machine Learning
@@ -47,7 +55,7 @@ const updatedSkillsData: Skill[] = [
   { name: 'Pandas', percentage: 70, category: 'Data Science', icon: 'Table', color: 'bg-purple-500', iconClasses: 'text-purple-600' },
   { name: 'Scikit-learn', percentage: 50, category: 'Data Science', icon: 'TrendingUp', color: 'bg-orange-500', iconClasses: 'text-orange-600' },
 
- // Programming Languages
+  // Programming Languages
   { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', color: 'bg-blue-500', iconClasses: 'text-yellow-400' },
   { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', color: 'bg-indigo-500', iconClasses: 'text-green-500' },
   { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', color: 'bg-sky-400', iconClasses: 'text-blue-500' },
@@ -70,15 +78,38 @@ const updatedSkillsData: Skill[] = [
 ];
 
 export default function HomePage() {
-  const [posts, setPosts] = React.useState<Post[]>([]); // Initialize with an empty array
+  const [posts, setPosts] = React.useState<BlogPost[]>([]);
+  const [postsLoading, setPostsLoading] = React.useState(true);
+  const supabase = createClientComponentClient();
+  
   const EducationIcon = iconComponents[educationData.icon];
   const ExperienceIcon = iconComponents[experienceData.icon];
 
   React.useEffect(() => {
-    fetch('/api/posts')
-      .then((res) => res.json())
-      .then((data: Post[]) => setPosts(data)); // Add type assertion
-  }, []); // Add empty dependency array
+    const fetchPosts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('id, title, slug, excerpt, meta_description, published_at, reading_time, views_count, tags')
+          .eq('status', 'published')
+          .order('published_at', { ascending: false })
+          .limit(6); // Show latest 6 posts
+
+        if (error) {
+          console.error('Error fetching posts:', error);
+          return;
+        }
+
+        setPosts(data || []);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setPostsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [supabase]);
 
   const groupedSkills = updatedSkillsData.reduce<GroupedSkills>((acc, skill) => {
     const { category } = skill;
@@ -101,6 +132,21 @@ export default function HomePage() {
 
   const sortedSkillCategories = skillCategoryOrder.filter(category => groupedSkills[category]);
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const getPostDescription = (post: BlogPost) => {
+    if (post.excerpt) return post.excerpt;
+    if (post.meta_description) return post.meta_description;
+    return 'Read more about this interesting topic...';
+  };
+
   return (
     <div className="bg-background text-foreground min-h-screen">
       <section id="home" className="section-container pt-12 md:pt-20">
@@ -112,10 +158,14 @@ export default function HomePage() {
               </h1>
               <div className="mt-6 text-lg text-muted-foreground max-w-2xl space-y-4">
                 <p>
- I'm an aspiring AI researcher and software developer with a strong foundation in deep learning, quantum computing, full-stack web development, and cybersecurity. Over the past year, I've built various projects using Python and Java, gaining hands-on experience with machine learning, PyTorch, and large language models (LLMs). I also co-authored a research paper exploring the intersection of AI and LLMs.
+                  I'm an aspiring AI researcher and software developer with a strong foundation in deep learning, quantum computing, full-stack web development, and cybersecurity. Over the past year, I've built various projects using Python and Java, gaining hands-on experience with machine learning, PyTorch, and large language models (LLMs). I also co-authored a research paper exploring the intersection of AI and LLMs.
                 </p>
-                <p>Currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), I'm focused on advancing intelligent systems that have real-world impact. I'm especially interested in using the synergy between AI and quantum physics—Quantum AI—to address challenges in areas like cancer treatment, renewable energy, and human health.</p>
-                <p>Fluent in 14 programming languages, I'm driven by a passion for building technologies that contribute to a better, smarter futur</p>
+                <p>
+                  Currently pursuing a B.Sc. in Computer Science at American International University-Bangladesh (AIUB), I'm focused on advancing intelligent systems that have real-world impact. I'm especially interested in using the synergy between AI and quantum physics—Quantum AI—to address challenges in areas like cancer treatment, renewable energy, and human health.
+                </p>
+                <p>
+                  Fluent in 14 programming languages, I'm driven by a passion for building technologies that contribute to a better, smarter future.
+                </p>
               </div>
             </div>
 
@@ -131,7 +181,7 @@ export default function HomePage() {
               </p>
             </div>
 
-             <div className="animate-fade-in-up animation-delay-400 bg-card p-6 rounded-lg shadow-md border border-border">
+            <div className="animate-fade-in-up animation-delay-400 bg-card p-6 rounded-lg shadow-md border border-border">
               <div className="flex items-center mb-4">
                 <ExperienceIcon className="mr-3 h-7 w-7 text-primary" />
                 <h2 className="text-2xl font-headline font-semibold text-foreground">
@@ -145,15 +195,15 @@ export default function HomePage() {
           </div>
 
           <div className="md:col-span-1 flex flex-col items-center space-y-6 animate-fade-in-right mt-8 md:mt-0 order-1 md:order-2">
-          <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72 rounded-full overflow-hidden border-4 border-primary shadow-lg">
-  <Image
-    src="/handsome.jpeg" // Updated path relative to the public directory
-    alt="Mohammad Shihab Hossain - Profile Picture"
-    layout="fill" // Use layout="fill" when the parent has fixed dimensions
-    objectFit="cover"
-    style={{ objectPosition: 'top' }} // Add objectPosition: 'top' to shift the image upwards
-  />
-</div>
+            <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72 rounded-full overflow-hidden border-4 border-primary shadow-lg">
+              <Image
+                src="/handsome.jpeg"
+                alt="Mohammad Shihab Hossain - Profile Picture"
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'top' }}
+                className="transition-transform duration-300 hover:scale-105"
+              />
+            </div>
 
             <div className="flex space-x-4">
               {profileLinks.map((link) => {
@@ -221,16 +271,97 @@ export default function HomePage() {
           <p className="text-center text-muted-foreground mb-12">
             Check out my recent blog posts and articles.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post, index) => (
-              <div key={index} className="bg-card p-6 rounded-lg shadow-md border border-border space-y-4">
-                <h3 className="text-xl font-semibold font-headline text-foreground">{post.title}</h3>
-                <p className="text-muted-foreground">{post.description}</p>
-                <Link href={`/posts/${post.slug}`} className="text-primary hover:underline">Read More</Link>
+          
+          {postsLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <span className="ml-3 text-muted-foreground">Loading posts...</span>
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📝</div>
+              <h3 className="text-xl font-semibold text-muted-foreground mb-2">
+                No published posts yet
+              </h3>
+              <p className="text-muted-foreground mb-6">
+                Check back later for new content!
+              </p>
+              <Button asChild>
+                <Link href="/posts">
+                  View All Posts
+                </Link>
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {posts.map((post) => (
+                  <div 
+                    key={post.id} 
+                    className="bg-card p-6 rounded-lg shadow-md border border-border space-y-4 hover:shadow-lg transition-shadow duration-300 group"
+                  >
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-semibold font-headline text-foreground group-hover:text-primary transition-colors duration-200">
+                        {post.title}
+                      </h3>
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <span>{formatDate(post.published_at)}</span>
+                        {post.reading_time > 0 && (
+                          <span>• {post.reading_time} min read</span>
+                        )}
+                        {post.views_count > 0 && (
+                          <span>• {post.views_count} views</span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {getPostDescription(post)}
+                    </p>
+                    
+                    {/* Tags */}
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {post.tags.slice(0, 2).map((tag, index) => (
+                          <span
+                            key={index}
+                            className="inline-block bg-primary/10 text-primary text-xs px-2 py-1 rounded-full"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                        {post.tags.length > 2 && (
+                          <span className="inline-block bg-muted text-muted-foreground text-xs px-2 py-1 rounded-full">
+                            +{post.tags.length - 2}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    
+                    <Link 
+                      href={`/posts/${post.slug}`} 
+                      className="text-primary hover:underline font-medium text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all duration-200"
+                    >
+                      Read More 
+                      <span className="text-lg">→</span>
+                    </Link>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+              
+              {/* View All Posts Button */}
+              <div className="text-center mt-12">
+                <Button asChild variant="outline" size="lg">
+                  <Link href="/posts" className="inline-flex items-center gap-2">
+                    View All Posts
+                    <span className="text-lg">→</span>
+                  </Link>
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </section>
     </div>
-  );}
+  );
+}
