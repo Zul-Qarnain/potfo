@@ -431,12 +431,12 @@ const AdminDashboard: React.FC = () => {
                   >
                     ✏️ Edit
                   </button>
-                            <button 
-                onClick={() => window.open(`/posts/${post.slug}`, '_blank')}
+                  <button 
+                    onClick={() => window.open(`/posts/${post.slug}`, '_blank')}
                     className="action-btn view"
-                        >
-            👁️ View
-          </button>
+                  >
+                    👁️ View
+                  </button>
                   <button 
                     onClick={() => unpublishPost(post.id, post.title)}
                     className="action-btn unpublish"

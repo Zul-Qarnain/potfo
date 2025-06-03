@@ -1,12 +1,12 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
+"use client";
+import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import RichTextEditor from '../../../../../components/RichTextEditor';
 
-// BlogPost interface matching your exact database schema
+// Define types directly in this file for now
 interface BlogPost {
-  id: string;
+  id?: string;
   title: string;
   slug: string;
   content: string;
@@ -14,247 +14,837 @@ interface BlogPost {
   meta_description?: string;
   meta_keywords?: string;
   featured_image_url?: string;
-  author_id: string;
+  author_id?: string;
   status: 'draft' | 'published' | 'archived';
-  published_at: string | null;
-  created_at: string;
-  updated_at: string;
-  views_count: number;
-  reading_time: number;
-  featured: boolean;
+  published_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  views_count?: number;
+  reading_time?: number;
+  featured?: boolean;
   tags: string[];
 }
 
-interface PostProps {
-  params: {
-    slug: string;
-  };
-}
+export default function EditPostPage() {
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
+  const params = useParams();
+  const postId = params?.id as string;
+  const supabase = createClientComponentClient();
 
-const PostPage = async ({ params }: PostProps) => {
-  const supabase = createServerComponentClient({ cookies });
-
-  // Fetch the post from Supabase
-  const { data: post, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('slug', params.slug)
-    .eq('status', 'published')
-    .single();
-
-  if (error || !post) {
-    notFound();
-  }
-
-  // Increment view count using your database function
-  try {
-    await supabase.rpc('increment_post_views', { post_slug: params.slug });
-  } catch (error) {
-    console.error('Error incrementing view count:', error);
-  }
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+  // Auto-generate slug from title
+  const generateSlug = (title: string): string => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
   };
 
-  const formatTags = (tags: string[]) => {
-    if (!tags || tags.length === 0) return 'Technology, Programming';
-    return tags.join(', ');
+  const handleTitleChange = (title: string): void => {
+    if (post) {
+      setPost({
+        ...post,
+        title,
+        slug: generateSlug(title),
+      });
+    }
   };
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-site.com';
-  const postUrl = `${siteUrl}/posts/${post.slug}`;
+  const calculateReadingTime = (content: string): number => {
+    const wordsPerMinute = 200;
+    const words = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
+    return Math.ceil(words / wordsPerMinute);
+  };
 
-  return (
-    <div className="flex flex-col items-center py-8 px-4">
-      <div className="w-full max-w-4xl">
-        {/* Back arrow and category section */}
-        <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
-          <Link href="/posts" className="hover:underline hover:text-purple-600 transition-colors duration-200">
-            ← Back to Posts
-          </Link>
-          <span className="mx-2">|</span>
-          <span>{formatTags(post.tags)}</span>
-        </div>
+  const handleTagsChange = (tagsString: string): void => {
+    if (post) {
+      const tagsArray: string[] = tagsString
+        .split(',')
+        .map(tag => tag.trim())
+        .filter(tag => tag.length > 0);
+      
+      setPost({
+        ...post,
+        tags: tagsArray
+      });
+    }
+  };
 
-        {/* Featured badge */}
-        {post.featured && (
-          <div className="text-center mb-4">
-            <span className="inline-block bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-              ⭐ Featured Post
-            </span>
-          </div>
-        )}
+  const loadPost = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('id', postId)
+        .single();
 
-        {/* Post Title and Date */}
-        <div className="text-center mb-8">
-          <p className="text-base text-gray-500 dark:text-gray-400 mb-2">
-            {formatDate(post.published_at!)}
-          </p>
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4 text-gray-900 dark:text-gray-100">
-            {post.title}
-          </h1>
-          <div className="flex items-center justify-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-            {post.reading_time > 0 && <span>{post.reading_time} min read</span>}
-            {post.views_count > 0 && <span>• {post.views_count + 1} views</span>}
-            <span>• Published {formatDate(post.created_at)}</span>
-          </div>
-        </div>
+      if (error) throw error;
+      if (!data) throw new Error('Post not found');
 
-        {/* Featured Image */}
-        {post.featured_image_url && (
-          <div className="relative w-full aspect-video overflow-hidden rounded-lg mb-8 shadow-lg">
-            <Image
-              src={post.featured_image_url}
-              alt={post.title}
-              fill
-              style={{ objectFit: 'cover' }}
-              className="object-cover"
-            />
-          </div>
-        )}
+      setPost(data);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load post';
+      setError(errorMessage);
+      console.error('Error loading post:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        {/* Post excerpt if available */}
-        {post.excerpt && (
-          <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mb-8 border-l-4 border-purple-600">
-            <p className="text-lg italic text-gray-700 dark:text-gray-300 leading-relaxed">
-              {post.excerpt}
-            </p>
-          </div>
-        )}
+  const savePost = async (status?: 'draft' | 'published'): Promise<void> => {
+    if (!post) return;
 
-        {/* Post Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none text-gray-800 dark:text-gray-200 leading-relaxed">
-          <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
-        </div>
+    setSaving(true);
+    setError('');
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
 
-        {/* Tags Section */}
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-            <span className="text-sm font-semibold text-gray-600 dark:text-gray-400 mr-2">Tags:</span>
-            {post.tags.map((tag: string, index: number) => (
-              <span
-                key={index}
-                className="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-sm px-3 py-1 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors cursor-pointer"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
+      const updateData = {
+        ...post,
+        status: status || post.status,
+        reading_time: calculateReadingTime(post.content),
+        updated_at: new Date().toISOString(),
+        published_at: (status === 'published' && post.status !== 'published') 
+          ? new Date().toISOString() 
+          : post.published_at,
+      };
 
-        {/* Social Sharing Buttons */}
-        <div className="flex justify-center space-x-4 my-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-          <span className="text-sm font-semibold text-gray-600 dark:text-gray-400 mr-4 self-center">Share:</span>
-          <a 
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(postUrl)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-200"
-            title="Share on Twitter"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
-            </svg>
-          </a>
-          <a 
-            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-500 hover:text-blue-700 dark:text-gray-400 dark:hover:text-blue-500 transition-colors duration-200"
-            title="Share on LinkedIn"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
-            </svg>
-          </a>
-          <a 
-            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-500 hover:text-blue-800 dark:text-gray-400 dark:hover:text-blue-600 transition-colors duration-200"
-            title="Share on Facebook"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path>
-            </svg>
-          </a>
-        </div>
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .update(updateData)
+        .eq('id', postId)
+        .select()
+        .single();
 
-        {/* About the Author section */}
-        <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6 mt-12 p-6 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-inner">
-          <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-300 dark:bg-gray-600 flex-shrink-0">
-            <Image
-              src="/panjabi.jpeg"
-              alt="Author Avatar"
-              width={96}
-              height={96}
-              className="object-cover w-full h-full"
-            />
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">About the Author</h3>
-            <p className="text-base text-gray-700 dark:text-gray-300">
-              Md. Mobin Chowdhury is an undergraduate Physics student at University of Dhaka, combining theoretical physics research with self-taught expertise in AI and quantum computing.
-            </p>
-          </div>
-        </div>
+      if (error) throw error;
 
-        {/* Navigation to other posts */}
-        <div className="mt-12 text-center">
-          <Link 
-            href="/posts" 
-            className="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 hover:shadow-md"
-          >
-            ← Back to All Posts
-          </Link>
-        </div>
+      // Update local state
+      setPost(data);
+      setIsEditing(false);
+
+      // Trigger sitemap regeneration if published
+      if (status === 'published') {
+        try {
+          await fetch('/api/sitemap/regenerate', { method: 'POST' });
+          await fetch('/api/seo/ping-google', { method: 'POST' });
+        } catch (seoError) {
+          console.warn('SEO operations failed:', seoError);
+        }
+      }
+
+      // Show success message
+      alert('Post saved successfully!');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      setError(errorMessage);
+      console.error('Error saving post:', err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const deletePost = async (): Promise<void> => {
+    if (!post || !confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', postId);
+
+      if (error) throw error;
+
+      router.push('/adminpacha/dashboard');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete post';
+      setError(errorMessage);
+      console.error('Error deleting post:', err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    if (postId) {
+      loadPost();
+    }
+  }, [postId]);
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading post...</p>
+        <style jsx>{`
+          .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            color: #6272a4;
+          }
+          .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #44475a;
+            border-top: 4px solid #bd93f9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
       </div>
-    </div>
-  );
-};
-
-export default PostPage;
-
-// Generate metadata for SEO
-export async function generateMetadata({ params }: PostProps) {
-  const supabase = createServerComponentClient({ cookies });
-  
-  const { data: post } = await supabase
-    .from('blog_posts')
-    .select('title, meta_description, featured_image_url, excerpt, tags')
-    .eq('slug', params.slug)
-    .eq('status', 'published')
-    .single();
+    );
+  }
 
   if (!post) {
-    return {
-      title: 'Post Not Found',
-    };
+    return (
+      <div className="error-container">
+        <h1>Post Not Found</h1>
+        <p>The post you're looking for doesn't exist or you don't have permission to access it.</p>
+        <button onClick={() => router.push('/adminpacha/dashboard')}>← Back to Dashboard</button>
+      </div>
+    );
   }
 
-  const description = post.meta_description || post.excerpt || post.title;
+  return (
+    <div className="edit-post-page">
+      <div className="post-header">
+        <div className="header-left">
+          <button 
+            onClick={() => router.push('/adminpacha/dashboard')}
+            className="back-btn"
+          >
+            ← Back to Dashboard
+          </button>
+          <div className="post-info">
+            <h1>{isEditing ? '✏️ Editing Post' : '📖 Viewing Post'}</h1>
+            <span className={`status-badge ${post.status}`}>
+              {post.status === 'draft' ? '📝' : post.status === 'published' ? '🌟' : '📦'} {post.status.toUpperCase()}
+            </span>
+          </div>
+        </div>
+        
+        <div className="post-actions">
+          {!isEditing ? (
+            <>
+              <button 
+                onClick={() => setIsEditing(true)}
+                className="edit-btn"
+                disabled={saving}
+              >
+                ✏️ Edit
+              </button>
+              {post.status === 'published' && (
+                <button 
+                  onClick={() => window.open(`/posts/${post.slug}`, '_blank')}
+                  className="view-btn"
+                >
+                  👁️ View Live
+                </button>
+              )}
+              <button 
+                onClick={() => savePost(post.status === 'published' ? 'draft' : 'published')}
+                className={post.status === 'published' ? 'unpublish-btn' : 'publish-btn'}
+                disabled={saving}
+              >
+                {post.status === 'published' ? '📦 Unpublish' : '🚀 Publish'}
+              </button>
+              <button 
+                onClick={deletePost}
+                className="delete-btn"
+                disabled={saving}
+              >
+                🗑️ Delete
+              </button>
+            </>
+          ) : (
+            <>
+              <button 
+                onClick={() => savePost()}
+                disabled={saving || !post.title.trim()}
+                className="save-btn"
+              >
+                💾 Save Changes
+              </button>
+              <button 
+                onClick={() => {
+                  setIsEditing(false);
+                  loadPost(); // Reload original data
+                }}
+                className="cancel-btn"
+                disabled={saving}
+              >
+                ❌ Cancel
+              </button>
+            </>
+          )}
+        </div>
+      </div>
 
-  return {
-    title: post.title,
-    description: description,
-    keywords: post.tags?.join(', '),
-    openGraph: {
-      title: post.title,
-      description: description,
-      images: post.featured_image_url ? [post.featured_image_url] : [],
-      type: 'article',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: description,
-      images: post.featured_image_url ? [post.featured_image_url] : [],
-    },
-  };
+      {error && (
+        <div className="error-banner">
+          <span className="error-icon">⚠️</span>
+          {error}
+        </div>
+      )}
+
+      <div className="post-content">
+        {!isEditing ? (
+          <div className="view-mode">
+            <div className="post-meta">
+              <p><strong>📅 Created:</strong> {new Date(post.created_at || '').toLocaleDateString()}</p>
+              {post.updated_at && (
+                <p><strong>📝 Updated:</strong> {new Date(post.updated_at).toLocaleDateString()}</p>
+              )}
+              {post.published_at && (
+                <p><strong>🌟 Published:</strong> {new Date(post.published_at).toLocaleDateString()}</p>
+              )}
+              <p><strong>📖 Reading Time:</strong> {post.reading_time || 0} min</p>
+              <p><strong>👀 Views:</strong> {post.views_count || 0}</p>
+            </div>
+
+            <div className="post-details">
+              <div className="detail-section">
+                <h3>Title</h3>
+                <p>{post.title}</p>
+              </div>
+
+              <div className="detail-section">
+                <h3>Slug</h3>
+                <p>/posts/{post.slug}</p>
+              </div>
+
+              <div className="detail-section">
+                <h3>Content</h3>
+                <div className="content-preview" dangerouslySetInnerHTML={{ __html: post.content }}></div>
+              </div>
+
+              {post.excerpt && (
+                <div className="detail-section">
+                  <h3>Excerpt</h3>
+                  <p>{post.excerpt}</p>
+                </div>
+              )}
+
+              {post.meta_description && (
+                <div className="detail-section">
+                  <h3>Meta Description</h3>
+                  <p>{post.meta_description}</p>
+                </div>
+              )}
+
+              {post.featured_image_url && (
+                <div className="detail-section">
+                  <h3>Featured Image</h3>
+                  <img src={post.featured_image_url} alt={post.title} className="featured-image-preview" />
+                </div>
+              )}
+
+              {post.tags && post.tags.length > 0 && (
+                <div className="detail-section">
+                  <h3>Tags</h3>
+                  <div className="tags-display">
+                    {post.tags.map((tag, index) => (
+                      <span key={index} className="tag">#{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="edit-mode">
+            <div className="post-form">
+              <div className="form-section">
+                <label className="form-label">Post Title</label>
+                <input
+                  type="text"
+                  value={post.title}
+                  onChange={(e) => handleTitleChange(e.target.value)}
+                  placeholder="Enter an engaging title..."
+                  className="title-input"
+                  disabled={saving}
+                />
+              </div>
+
+              <div className="form-section">
+                <label className="form-label">URL Slug (SEO)</label>
+                <input
+                  type="text"
+                  value={post.slug}
+                  onChange={(e) => setPost({ ...post, slug: e.target.value })}
+                  placeholder="url-friendly-slug"
+                  className="slug-input"
+                  disabled={saving}
+                />
+                <small className="input-hint">
+                  📍 Your post will be available at: /posts/{post.slug || 'your-slug'}
+                </small>
+              </div>
+
+              <div className="form-section">
+                <label className="form-label">Content</label>
+                <RichTextEditor
+                  content={post.content}
+                  onChange={(content: string) => setPost({ ...post, content })}
+                  placeholder="Start writing your amazing blog post..."
+                />
+              </div>
+
+              <div className="seo-section">
+                <h3>🔍 SEO Settings</h3>
+                
+                <div className="form-section">
+                  <label className="form-label">Excerpt (Optional)</label>
+                  <textarea
+                    value={post.excerpt || ''}
+                    onChange={(e) => setPost({ ...post, excerpt: e.target.value })}
+                    placeholder="Brief excerpt for post previews..."
+                    className="meta-textarea"
+                    disabled={saving}
+                  />
+                </div>
+                
+                <div className="form-section">
+                  <label className="form-label">Meta Description (160 chars max)</label>
+                  <textarea
+                    value={post.meta_description || ''}
+                    onChange={(e) => setPost({ ...post, meta_description: e.target.value })}
+                    placeholder="Brief description for search engines..."
+                    className="meta-textarea"
+                    maxLength={160}
+                    disabled={saving}
+                  />
+                  <small className="char-count">
+                    {(post.meta_description || '').length}/160 characters
+                  </small>
+                </div>
+
+                <div className="form-section">
+                  <label className="form-label">Featured Image URL</label>
+                  <input
+                    type="url"
+                    value={post.featured_image_url || ''}
+                    onChange={(e) => setPost({ ...post, featured_image_url: e.target.value })}
+                    placeholder="https://example.com/image.jpg"
+                    className="image-input"
+                    disabled={saving}
+                  />
+                </div>
+
+                <div className="form-section">
+                  <label className="form-label">Tags (comma-separated)</label>
+                  <input
+                    type="text"
+                    value={post.tags.join(', ')}
+                    onChange={(e) => handleTagsChange(e.target.value)}
+                    placeholder="nextjs, react, web development"
+                    className="tags-input"
+                    disabled={saving}
+                  />
+                  <small className="input-hint">
+                    Current tags: {post.tags.length > 0 ? post.tags.map(tag => `#${tag}`).join(' ') : 'None'}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <style jsx>{`
+        .edit-post-page {
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 2rem;
+        }
+
+        .post-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 2rem;
+          padding-bottom: 1rem;
+          border-bottom: 2px solid #44475a;
+        }
+
+        .header-left {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .back-btn {
+          background: #6272a4;
+          color: #f8f8f2;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-family: inherit;
+        }
+
+        .back-btn:hover {
+          background: #50fa7b;
+          color: #282a36;
+        }
+
+        .post-info {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .post-info h1 {
+          color: #bd93f9;
+          font-size: 2rem;
+          margin: 0;
+        }
+
+        .status-badge {
+          padding: 0.5rem 1rem;
+          border-radius: 12px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          border: 2px solid;
+        }
+
+        .status-badge.draft {
+          background: rgba(255, 184, 108, 0.2);
+          color: #ffb86c;
+          border-color: #ffb86c;
+        }
+
+        .status-badge.published {
+          background: rgba(80, 250, 123, 0.2);
+          color: #50fa7b;
+          border-color: #50fa7b;
+        }
+
+        .status-badge.archived {
+          background: rgba(98, 114, 164, 0.2);
+          color: #6272a4;
+          border-color: #6272a4;
+        }
+
+        .post-actions {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .edit-btn, .view-btn, .publish-btn, .unpublish-btn, .delete-btn, .save-btn, .cancel-btn {
+          padding: 0.5rem 1rem;
+          border: none;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-family: inherit;
+          font-size: 0.9rem;
+        }
+
+        .edit-btn {
+          background: #8be9fd;
+          color: #282a36;
+        }
+
+        .view-btn {
+          background: #50fa7b;
+          color: #282a36;
+        }
+
+        .publish-btn {
+          background: #50fa7b;
+          color: #282a36;
+        }
+
+        .unpublish-btn {
+          background: #ffb86c;
+          color: #282a36;
+        }
+
+        .delete-btn {
+          background: #ff5555;
+          color: #f8f8f2;
+        }
+
+        .save-btn {
+          background: #50fa7b;
+          color: #282a36;
+        }
+
+        .cancel-btn {
+          background: #6272a4;
+          color: #f8f8f2;
+        }
+
+        .edit-btn:hover, .view-btn:hover, .publish-btn:hover, .save-btn:hover {
+          transform: translateY(-1px);
+        }
+
+        .unpublish-btn:hover, .cancel-btn:hover {
+          transform: translateY(-1px);
+        }
+
+        .delete-btn:hover {
+          transform: translateY(-1px);
+          background: #ff7979;
+        }
+
+        .edit-btn:disabled, .view-btn:disabled, .publish-btn:disabled, .unpublish-btn:disabled, 
+        .delete-btn:disabled, .save-btn:disabled, .cancel-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        .error-banner {
+          background: linear-gradient(135deg, rgba(255, 85, 85, 0.2) 0%, rgba(255, 85, 85, 0.1) 100%);
+          color: #ff5555;
+          padding: 1rem;
+          border-radius: 8px;
+          margin-bottom: 2rem;
+          border: 1px solid rgba(255, 85, 85, 0.3);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .error-icon {
+          font-size: 1.2rem;
+        }
+
+        .post-meta {
+          background: linear-gradient(135deg, rgba(189, 147, 249, 0.1) 0%, rgba(139, 233, 253, 0.1) 100%);
+          border: 1px solid rgba(189, 147, 249, 0.3);
+          border-radius: 12px;
+          padding: 1.5rem;
+          margin-bottom: 2rem;
+        }
+
+        .post-meta p {
+          color: #f8f8f2;
+          margin: 0.5rem 0;
+        }
+
+        .post-details {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+
+        .detail-section {
+          background: linear-gradient(135deg, #1e1f29 0%, #282a36 100%);
+          border: 2px solid #44475a;
+          border-radius: 12px;
+          padding: 1.5rem;
+        }
+
+        .detail-section h3 {
+          color: #bd93f9;
+          margin: 0 0 1rem 0;
+          font-size: 1.2rem;
+        }
+
+        .detail-section p {
+          color: #f8f8f2;
+          line-height: 1.6;
+          margin: 0;
+        }
+
+        .content-preview {
+          color: #f8f8f2;
+          line-height: 1.6;
+        }
+
+        .content-preview h1, .content-preview h2, .content-preview h3 {
+          color: #bd93f9;
+        }
+
+        .featured-image-preview {
+          max-width: 100%;
+          height: auto;
+          border-radius: 8px;
+        }
+
+        .tags-display {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .tag {
+          background: rgba(189, 147, 249, 0.2);
+          color: #bd93f9;
+          padding: 0.25rem 0.5rem;
+          border-radius: 12px;
+          font-size: 0.8rem;
+          border: 1px solid rgba(189, 147, 249, 0.3);
+        }
+
+        .post-form {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+
+        .form-section {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .form-label {
+          color: #f8f8f2;
+          font-weight: 600;
+          font-size: 1.1rem;
+        }
+
+        .title-input, .slug-input, .image-input, .tags-input {
+          padding: 1rem;
+          background: #1e1f29;
+          border: 2px solid #44475a;
+          border-radius: 8px;
+          color: #f8f8f2;
+          font-size: 1.1rem;
+          transition: border-color 0.2s ease;
+          font-family: inherit;
+        }
+
+        .title-input {
+          font-size: 1.5rem;
+          font-weight: 600;
+        }
+
+        .title-input:focus, .slug-input:focus, .image-input:focus, .tags-input:focus, .meta-textarea:focus {
+          outline: none;
+          border-color: #bd93f9;
+          box-shadow: 0 0 0 3px rgba(189, 147, 249, 0.2);
+        }
+
+        .title-input:disabled, .slug-input:disabled, .image-input:disabled, .tags-input:disabled, .meta-textarea:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .meta-textarea {
+          padding: 1rem;
+          background: #1e1f29;
+          border: 2px solid #44475a;
+          border-radius: 8px;
+          color: #f8f8f2;
+          font-size: 1rem;
+          min-height: 80px;
+          resize: vertical;
+          font-family: inherit;
+        }
+
+        .input-hint, .char-count {
+          color: #6272a4;
+          font-size: 0.8rem;
+          margin-top: 0.25rem;
+        }
+
+        .char-count {
+          text-align: right;
+        }
+
+        .seo-section {
+          background: linear-gradient(135deg, rgba(139, 233, 253, 0.1) 0%, rgba(139, 233, 253, 0.05) 100%);
+          border: 2px solid rgba(139, 233, 253, 0.3);
+          border-radius: 12px;
+          padding: 2rem;
+          margin-top: 2rem;
+        }
+
+        .seo-section h3 {
+          color: #8be9fd;
+          margin: 0 0 1.5rem 0;
+          font-size: 1.3rem;
+        }
+
+        .error-container {
+          text-align: center;
+          padding: 3rem;
+          color: #f8f8f2;
+        }
+
+        .error-container h1 {
+          color: #ff5555;
+          margin-bottom: 1rem;
+        }
+
+        .error-container button {
+          background: #bd93f9;
+          color: #282a36;
+          border: none;
+          padding: 1rem 2rem;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-family: inherit;
+          margin-top: 2rem;
+        }
+
+        .error-container button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(189, 147, 249, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          .edit-post-page {
+            padding: 1rem;
+          }
+
+          .post-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: stretch;
+          }
+
+          .post-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+
+          .post-info h1 {
+            font-size: 1.5rem;
+          }
+
+          .post-actions {
+            justify-content: center;
+          }
+
+          .title-input {
+            font-size: 1.2rem;
+          }
+        }
+      `}</style>
+    </div>
+  );
 }
