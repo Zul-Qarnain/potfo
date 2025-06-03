@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import React from 'react';
 export const dynamic = 'force-static';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -8,48 +11,55 @@ import type { Skill } from '@/lib/data';
 import {
   Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle,
   Layout, Palette, BoxSelect, Server, Database, DatabaseZap,
-  GraduationCap, Github, FlaskConical, Linkedin, School, Briefcase, 
+  GraduationCap, Github,
   Settings2, HelpCircle, Bot, GalleryHorizontalEnd, Gamepad2, MessageSquare,
-  Coffee, Activity, PieChart, Table, BarChart3, TrendingUp
-} from 'lucide-react';
+  Coffee, Activity, PieChart, Table, BarChart3, TrendingUp, FlaskConical, Linkedin, School, Briefcase
+} from 'lucide-react'
 
 interface GroupedSkills {
   [category: string]: Skill[];
 }
 
 const iconComponents: { [key: string]: React.ElementType } = {
-  Flame, Smile, Sigma, Braces, Code2, FileText, Atom, Triangle, Layout, 
-  Palette, BoxSelect, Server, Database, DatabaseZap, GraduationCap, Github, 
-  FlaskConical, Linkedin, School, Briefcase, Settings2, HelpCircle, Bot, 
-  GalleryHorizontalEnd, Gamepad2, MessageSquare, Coffee, Activity, PieChart, 
-  Table, BarChart3, TrendingUp
+  Flame: Flame, Smile: Smile, Sigma: Sigma, Braces: Braces, Code2: Code2, FileText: FileText, Atom: Atom, Triangle: Triangle, Layout: Layout,
+  Palette: Palette, BoxSelect: BoxSelect, Server: Server, Database: Database, DatabaseZap: DatabaseZap, GraduationCap: GraduationCap, Github: Github, 
+  Settings2: Settings2, HelpCircle: HelpCircle, Bot: Bot, 
+  GalleryHorizontalEnd: GalleryHorizontalEnd, Gamepad2: Gamepad2, MessageSquare: MessageSquare,
+  Coffee: Coffee, Activity: Activity, PieChart: PieChart,
+ Table, BarChart3, TrendingUp,
+  FlaskConical: FlaskConical, Linkedin: Linkedin, School: School, Briefcase: Briefcase,
 };
 
+interface Post {
+  title: string;
+  description: string; icon: string; slug: string;
+};
+ 
 // Updated skills data with specific percentages and colors
-const updatedSkillsData: Skill[] = [
+const updatedSkillsData: Skill[] = [  
   // Machine Learning
-  { name: 'PyTorch', percentage: 60, category: 'Machine Learning', icon: 'Flame', color: 'bg-teal-400', iconClasses: 'text-orange-500' },
+  { name: 'PyTorch', percentage: 60, category: 'Machine Learning', icon: 'Flame', color: 'bg-teal-400', iconClasses: 'text-orange-500'},
   { name: 'Hugging Face', percentage: 50, category: 'Machine Learning', icon: 'Smile', color: 'bg-green-400', iconClasses: 'text-yellow-400' },
-  
+
   // Data Science
   { name: 'NumPy', percentage: 70, category: 'Data Science', icon: 'Sigma', color: 'bg-blue-500', iconClasses: 'text-blue-500' },
   { name: 'Matplotlib', percentage: 60, category: 'Data Science', icon: 'BarChart3', color: 'bg-blue-600', iconClasses: 'text-blue-600' },
   { name: 'Pandas', percentage: 70, category: 'Data Science', icon: 'Table', color: 'bg-purple-500', iconClasses: 'text-purple-600' },
   { name: 'Scikit-learn', percentage: 50, category: 'Data Science', icon: 'TrendingUp', color: 'bg-orange-500', iconClasses: 'text-orange-600' },
-  
-  // Programming Languages
+
+ // Programming Languages
   { name: 'JavaScript', percentage: 70, category: 'Programming Languages', icon: 'Braces', color: 'bg-blue-500', iconClasses: 'text-yellow-400' },
   { name: 'Python', percentage: 90, category: 'Programming Languages', icon: 'Code2', color: 'bg-indigo-500', iconClasses: 'text-green-500' },
   { name: 'TypeScript', percentage: 50, category: 'Programming Languages', icon: 'FileText', color: 'bg-sky-400', iconClasses: 'text-blue-500' },
   { name: 'Java', percentage: 70, category: 'Programming Languages', icon: 'Coffee', color: 'bg-red-500', iconClasses: 'text-red-600' },
   { name: 'C++', percentage: 90, category: 'Programming Languages', icon: 'Settings2', color: 'bg-blue-700', iconClasses: 'text-blue-700' },
-  
+
   // Frontend
   { name: 'React', percentage: 60, category: 'Frontend', icon: 'Atom', color: 'bg-purple-500', iconClasses: 'text-sky-500' },
   { name: 'Next.js', percentage: 55, category: 'Frontend', icon: 'Triangle', color: 'bg-emerald-500', iconClasses: 'text-foreground dark:text-white' },
   { name: 'HTML5/CSS3', percentage: 80, category: 'Frontend', icon: 'Layout', color: 'bg-orange-400', iconClasses: 'text-orange-500' },
   { name: 'Tailwind CSS', percentage: 60, category: 'Frontend', icon: 'Palette', color: 'bg-pink-400', iconClasses: 'text-purple-500' },
-  
+
   // Backend
   { name: 'Node.js', percentage: 70, category: 'Backend', icon: 'BoxSelect', color: 'bg-lime-500', iconClasses: 'text-green-600' },
   { name: 'Express', percentage: 70, category: 'Backend', icon: 'Server', color: 'bg-slate-400', iconClasses: 'text-neutral-400' },
@@ -60,8 +70,15 @@ const updatedSkillsData: Skill[] = [
 ];
 
 export default function HomePage() {
-  const EducationIcon = iconComponents[educationData.icon] || HelpCircle;
-  const ExperienceIcon = iconComponents[experienceData.icon] || HelpCircle;
+  const [posts, setPosts] = React.useState<Post[]>([]); // Initialize with an empty array
+  const EducationIcon = iconComponents[educationData.icon];
+  const ExperienceIcon = iconComponents[experienceData.icon];
+
+  React.useEffect(() => {
+    fetch('/api/posts')
+      .then((res) => res.json())
+      .then((data: Post[]) => setPosts(data)); // Add type assertion
+  }, []); // Add empty dependency array
 
   const groupedSkills = updatedSkillsData.reduce<GroupedSkills>((acc, skill) => {
     const { category } = skill;
@@ -81,7 +98,7 @@ export default function HomePage() {
     'Backend',
     'Database',
   ];
-  
+
   const sortedSkillCategories = skillCategoryOrder.filter(category => groupedSkills[category]);
 
   return (
@@ -163,7 +180,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      
+
       <section id="skills" className="section-container bg-muted/30 dark:bg-popover py-16 md:py-24 rounded-lg my-12">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-headline font-bold text-center mb-4 text-foreground">
@@ -180,10 +197,10 @@ export default function HomePage() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                   {groupedSkills[category].map((skill) => (
-                    <SkillBar 
-                      key={skill.name} 
-                      skillName={skill.name} 
-                      percentage={skill.percentage} 
+                    <SkillBar
+                      key={skill.name}
+                      skillName={skill.name}
+                      percentage={skill.percentage}
                       barColor={skill.color}
                       iconName={skill.icon}
                       iconClasses={skill.iconClasses}
@@ -195,6 +212,25 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <section id="posts" className="section-container py-16 md:py-24 my-12">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-headline font-bold text-center mb-4 text-foreground">
+            Latest Posts
+          </h2>
+          <p className="text-center text-muted-foreground mb-12">
+            Check out my recent blog posts and articles.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post, index) => (
+              <div key={index} className="bg-card p-6 rounded-lg shadow-md border border-border space-y-4">
+                <h3 className="text-xl font-semibold font-headline text-foreground">{post.title}</h3>
+                <p className="text-muted-foreground">{post.description}</p>
+                <Link href={`/posts/${post.slug}`} className="text-primary hover:underline">Read More</Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
-  );
-}
+  );}
