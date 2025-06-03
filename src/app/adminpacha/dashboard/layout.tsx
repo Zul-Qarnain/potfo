@@ -1,8 +1,9 @@
 "use client";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import type { User } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase";
+import type { User } from "@supabase/supabase-js";
+
 
 interface AdminLayoutProps {
   children: React.ReactNode;

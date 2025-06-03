@@ -1,7 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@supabase/supabase-js";
+
+// Create Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 const AdminLoginPage = () => {
   const [email, setEmail] = useState("");
@@ -10,7 +16,6 @@ const AdminLoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-  const supabase = createClientComponentClient();
 
   // Check if user is already logged in
   useEffect(() => {
@@ -25,7 +30,7 @@ const AdminLoginPage = () => {
       }
     };
     checkUser();
-  }, [router, supabase.auth]);
+  }, [router]);
 
   const handleLogin = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -78,7 +83,7 @@ const AdminLoginPage = () => {
           <p className="login-subtitle">Welcome back, <span className="username">Zul-Qarnain</span></p>
           <div className="datetime">
             <span className="date-icon">🌙</span>
-            2025-06-03 16:09:47 UTC
+            2025-06-03 20:21:17 UTC
           </div>
         </div>
 

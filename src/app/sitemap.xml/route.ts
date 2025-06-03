@@ -1,9 +1,22 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
+// Create Supabase client for server-side operations
+function createServerSupabaseClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: false
+      }
+    }
+  );
+}
+
 export async function GET() {
-  const supabase = createRouteHandlerClient({ cookies });
+  const supabase = createServerSupabaseClient();
 
   try {
     // Get all published posts

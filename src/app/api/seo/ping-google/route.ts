@@ -1,10 +1,23 @@
 import { NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
+
+// Create Supabase client for server-side operations
+function createServerSupabaseClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: false
+      }
+    }
+  );
+}
 
 export async function POST() {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createServerSupabaseClient();
     
     // Verify authentication
     const { data: { user } } = await supabase.auth.getUser();
