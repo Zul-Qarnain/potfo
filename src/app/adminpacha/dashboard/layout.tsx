@@ -2,14 +2,19 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { User } from "@supabase/auth-helpers-nextjs";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
+interface AdminHeaderProps {
+  user: User | null;
+}
+
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null); // Fix: Proper typing
   const router = useRouter();
   const supabase = createClientComponentClient();
 
@@ -104,8 +109,11 @@ const AdminSidebar = () => (
       <a href="/adminpacha/dashboard" className="nav-item">
         📊 Dashboard
       </a>
-      <a href="/adminpacha/dashboard/posts" className="nav-item">
+      <a href="/posts" className="nav-item" target="_blank" rel="noopener noreferrer">
         📝 Blog Posts
+      </a>
+      <a href="/adminpacha/dashboard/posts" className="nav-item">
+        🛠️ Manage Posts
       </a>
       <a href="/adminpacha/dashboard/posts/new" className="nav-item">
         ➕ New Post
@@ -155,7 +163,7 @@ const AdminSidebar = () => (
   </aside>
 );
 
-const AdminHeader = ({ user }) => {
+const AdminHeader = ({ user }: AdminHeaderProps) => { // Fix: Proper typing
   const supabase = createClientComponentClient();
   const router = useRouter();
 

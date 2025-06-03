@@ -30,14 +30,38 @@ export async function GET() {
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>${baseUrl}/blog</loc>
+    <loc>${baseUrl}posts</loc>
     <lastmod>${posts.length > 0 ? posts[0].updated_at : new Date().toISOString()}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>${baseUrl}publications</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}projects</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}events</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}contact</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
   ${posts.map(post => `
   <url>
-    <loc>${baseUrl}/blog/${post.slug}</loc>
+    <loc>${baseUrl}posts/${post.slug}</loc>
     <lastmod>${post.updated_at}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

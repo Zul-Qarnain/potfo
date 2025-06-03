@@ -1,33 +1,43 @@
 import { NextResponse } from 'next/server';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 export async function POST() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://shihab.vercel.app/';
-  const sitemapUrl = `${siteUrl}/sitemap.xml`;
-
   try {
-    // Ping Google Search Console
-    const googleResponse = await fetch(
-      `https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`,
-      { method: 'GET' }
-    );
+    const supabase = createRouteHandlerClient({ cookies });
+    
+    // Verify authentication
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
 
-    // Ping Bing Webmaster Tools
-    const bingResponse = await fetch(
-      `https://www.bing.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`,
-      { method: 'GET' }
-    );
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://shihab.vercel.app/';
+    const sitemapUrl = `${siteUrl}sitemap.xml`;
+    
+    // Ping Google
+    const googlePingUrl = `https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`;
+    
+    try {
+      const response = await fetch(googlePingUrl);
+      console.log('Google ping response:', response.status);
+    } catch (error) {
+      console.warn('Failed to ping Google:', error);
+    }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Sitemap submitted to search engines',
-      google: googleResponse.ok,
-      bing: bingResponse.ok,
-    });
+    // Ping Bing
+    const bingPingUrl = `https://www.bing.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`;
+    
+    try {
+      const response = await fetch(bingPingUrl);
+      console.log('Bing ping response:', response.status);
+    } catch (error) {
+      console.warn('Failed to ping Bing:', error);
+    }
+
+    return new NextResponse('Search engines notified', { status: 200 });
   } catch (error) {
     console.error('Error pinging search engines:', error);
-    return NextResponse.json({
-      success: false,
-      error: 'Failed to ping search engines',
-    }, { status: 500 });
+    return new NextResponse('Error pinging search engines', { status: 500 });
   }
 }
