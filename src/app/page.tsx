@@ -202,7 +202,7 @@ export default function HomePage() {
           <div className="md:col-span-1 flex flex-col items-center space-y-6 animate-fade-in-right mt-8 md:mt-0 order-1 md:order-2">
             <div className="relative w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72 rounded-full overflow-hidden border-4 border-primary shadow-lg">
               <Image
-                src="/handsome.jpeg"
+                src="/Test.jpeg"
                 alt="Mohammad Shihab Hossain - Profile Picture"
                 fill
                 style={{ objectFit: 'cover', objectPosition: 'top' }}

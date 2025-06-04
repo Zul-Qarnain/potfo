@@ -23,9 +23,9 @@ interface BlogPost {
 }
 
 interface PostProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 // Function to increment view count
@@ -55,13 +55,14 @@ async function incrementViewCount(postId: string) {
 }
 
 const PostPage = async ({ params }: PostProps) => {
+  const { slug } = await params;
   const supabase = await createServerSupabaseClient();
 
   // Fetch the post from Supabase
   const { data: post, error } = await supabase
     .from('blog_posts')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .eq('status', 'published')
     .single();
 
@@ -194,12 +195,13 @@ export default PostPage;
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PostProps) {
+  const { slug } = await params;
   const supabase = await createServerSupabaseClient();
   
   const { data: post } = await supabase
     .from('blog_posts')
     .select('title, meta_description, featured_image_url')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .eq('status', 'published')
     .single();
 

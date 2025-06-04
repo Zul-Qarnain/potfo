@@ -2,6 +2,12 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  experimental: {
+    turbo: {
+      // Hide turbopack indicator
+      devIndicators: false,
+    },
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
