@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
 
 
@@ -17,9 +17,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null); // Fix: Proper typing
   const router = useRouter();
-  const supabase = createClientComponentClient();
 
   useEffect(() => {
+    const supabase = createClient();
+    
     const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -37,7 +38,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     });
 
     return () => subscription.unsubscribe();
-  }, [router, supabase.auth]);
+  }, [router]);
 
   if (loading) {
     return (
@@ -165,10 +166,10 @@ const AdminSidebar = () => (
 );
 
 const AdminHeader = ({ user }: AdminHeaderProps) => { // Fix: Proper typing
-  const supabase = createClientComponentClient();
   const router = useRouter();
 
   const handleLogout = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/adminpacha");
   };

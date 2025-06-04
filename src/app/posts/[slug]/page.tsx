@@ -1,5 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@/lib/supabase';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
@@ -29,23 +28,10 @@ interface PostProps {
   };
 }
 
-// Create Supabase client for server-side operations
-function createServerSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: false
-      }
-    }
-  );
-}
-
 // Function to increment view count
 async function incrementViewCount(postId: string) {
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     
     // Get current view count
     const { data: currentPost } = await supabase
@@ -69,7 +55,7 @@ async function incrementViewCount(postId: string) {
 }
 
 const PostPage = async ({ params }: PostProps) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   // Fetch the post from Supabase
   const { data: post, error } = await supabase
@@ -208,7 +194,7 @@ export default PostPage;
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PostProps) {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   
   const { data: post } = await supabase
     .from('blog_posts')

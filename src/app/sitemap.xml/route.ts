@@ -1,22 +1,8 @@
-import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
-// Create Supabase client for server-side operations
-function createServerSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: false
-      }
-    }
-  );
-}
-
 export async function GET() {
-  const supabase = createServerSupabaseClient();
+  const supabase = createClient();
 
   try {
     // Get all published posts
@@ -44,7 +30,7 @@ export async function GET() {
   </url>
   <url>
     <loc>${baseUrl}posts</loc>
-    <lastmod>${posts.length > 0 ? posts[0].updated_at : new Date().toISOString()}</lastmod>
+    <lastmod>${posts && posts.length > 0 ? posts[0].updated_at : new Date().toISOString()}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -72,13 +58,13 @@ export async function GET() {
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  ${posts.map(post => `
+  ${posts ? posts.map(post => `
   <url>
     <loc>${baseUrl}posts/${post.slug}</loc>
     <lastmod>${post.updated_at}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>`).join('')}
+  </url>`).join('') : ''}
 </urlset>`;
 
     return new NextResponse(sitemap, {

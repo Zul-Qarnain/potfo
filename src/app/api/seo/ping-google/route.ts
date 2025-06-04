@@ -1,27 +1,15 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { createClient } from '@/lib/supabase/server';
 
-// Create Supabase client for server-side operations
-function createServerSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: false
-      }
-    }
-  );
-}
-
-export async function POST() {
+export async function POST(request: Request) {
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase = createClient();
     
     // Verify authentication
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      console.log('Authentication failed:', authError?.message || 'No user found');
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
