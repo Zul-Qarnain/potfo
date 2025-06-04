@@ -182,7 +182,7 @@ const PostPage = async ({ params }: PostProps) => {
           <div>
             <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">About the Author</h3>
             <p className="text-base text-gray-700 dark:text-gray-300">
-              Md. Mobin Chowdhury is an undergraduate Physics student at University of Dhaka, combining theoretical physics research with self-taught expertise in AI and quantum computing.
+              Mohammad Shihab Hossain is an undergraduate Computer Science student at American International University-Bangladesh. He is combining his formal education in computer science with self-taught expertise in Artificial Intelligence, Cybersecurity, and Quantum Computing, actively engaging in research and hands-on learning in these cutting-edge fields.
             </p>
           </div>
         </div>
